@@ -2,17 +2,26 @@ import React, {useState, useEffect} from 'react';
 import TaskCardB from "./TaskCardB";
 import NewTaskCard from "./NewTaskCard";
 import ModalComponent from "./ModalComponent";
+import {createClient} from "@supabase/supabase-js";
+
 
 
 const MainTaskPageB = () => {
+
+
+    const supabaseUrl = process.env["REACT_APP_SUPABASE_API_ENDPOINT"]
+    const supabaseKey = process.env["REACT_APP_SUPABASE_API_SECRET_KEY"]
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+
     const [description, setDescription] = useState('');
     const [title, setTitle] = useState('');
     const [privacy, setPrivacy] = useState('public');
-    //const [completed, setCompleted] = useState('false');
+
     const [created_date, setDate] = useState(new Date());
     const [important, setImportant] = useState("false")
     const dateNow = Date()
-    const ALL_TASK_DATA_API_URL_B ="https://hbrqywvuotrufdzvyden.supabase.co/rest/v1/TaskB"
+    let [dependancy, setDependancy] = useState(0)
 
 
     const handleDescription = (event) => {
@@ -49,104 +58,96 @@ const MainTaskPageB = () => {
 
     const addNewTask = async () => {
 
-        const newTask = [{title: title, description: description, privacy:privacy, important:important, created_at: "10/6/2022", completed:"false", user_id:2}]
-
-        const response = await fetch(ALL_TASK_DATA_API_URL, {
-            method:"POST",
-            headers: {
-                "Content-Type":"application/json",
-                apikey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhicnF5d3Z1b3RydWZkenZ5ZGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjQ5MjM4MTIsImV4cCI6MTk4MDQ5OTgxMn0.t8ayO5c6H2X0cZgeNkzbwtMzAkbs1xFlJeuumCboIlQ",
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhicnF5d3Z1b3RydWZkenZ5ZGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjQ5MjM4MTIsImV4cCI6MTk4MDQ5OTgxMn0.t8ayO5c6H2X0cZgeNkzbwtMzAkbs1xFlJeuumCboIlQ",
-
-            },
-            body: JSON.stringify(newTask)
+        const newTask = [{title: title, description: description, privacy:privacy, important:important, created_at: "10/6/2022", completed:"false",}]
 
 
-        });
-        //const result = await response.json()
-        //setAllTaskData(result)
-        //console.log(result)
-        //return result
+        const { data, error } = await supabase
+            .from('oldtasks')
+            .insert(newTask);
 
-
+        setDependancy(dependancy + 1)
     }
     //Start of filtering logic
 
-    const ALL_TASK_DATA_API_URL ="https://hbrqywvuotrufdzvyden.supabase.co/rest/v1/TaskB?select=*"
-    const ALL_COMPLETED_API_URL = "https://hbrqywvuotrufdzvyden.supabase.co/rest/v1/TaskB?completed=eq.true&select=*"
-    const IMPORTANT_TASKS_API_URL ="https://hbrqywvuotrufdzvyden.supabase.co/rest/v1/TaskB?important=eq.true&select=*"
+
 
     const currentDate = Date()
     const [allTaskData, setAllTaskData] = useState([])
 
 
     const getTaskData = async () => {
-        const response = await fetch(ALL_TASK_DATA_API_URL, {
-            method:"GET",
-            headers: {
-                "Content-Type":"application/json",
-                apikey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhicnF5d3Z1b3RydWZkenZ5ZGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjQ5MjM4MTIsImV4cCI6MTk4MDQ5OTgxMn0.t8ayO5c6H2X0cZgeNkzbwtMzAkbs1xFlJeuumCboIlQ",
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhicnF5d3Z1b3RydWZkenZ5ZGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjQ5MjM4MTIsImV4cCI6MTk4MDQ5OTgxMn0.t8ayO5c6H2X0cZgeNkzbwtMzAkbs1xFlJeuumCboIlQ"
-            },
 
-        });
-        const result = await response.json()
-        setAllTaskData(result)
-        console.log(result)
-        //console.log(currentDate)
-        return result
+        let { data: oldtasks, error } = await supabase
+            .from('oldtasks')
+            .select('*');
+
+        setAllTaskData(oldtasks)
+        return oldtasks
+
 
 
     }
     const getCompletedTasks = async () => {
-        const response = await fetch(ALL_COMPLETED_API_URL, {
-            method:"GET",
-            headers: {
-                "Content-Type":"application/json",
-                apikey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhicnF5d3Z1b3RydWZkenZ5ZGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjQ5MjM4MTIsImV4cCI6MTk4MDQ5OTgxMn0.t8ayO5c6H2X0cZgeNkzbwtMzAkbs1xFlJeuumCboIlQ",
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhicnF5d3Z1b3RydWZkenZ5ZGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjQ5MjM4MTIsImV4cCI6MTk4MDQ5OTgxMn0.t8ayO5c6H2X0cZgeNkzbwtMzAkbs1xFlJeuumCboIlQ"
-            },
+        let { data: oldtasks, error } = await supabase
+            .from('oldtasks')
+            .select("*")
+            .eq('completed', true);
 
-        });
-        const result = await response.json()
-        setAllTaskData(result)
-        console.log(result)
-        return result
-
+        setAllTaskData(oldtasks)
 
     }
     const getImportantTasks = async () => {
-        const response = await fetch(IMPORTANT_TASKS_API_URL, {
-            method:"GET",
-            headers: {
-                "Content-Type":"application/json",
-                apikey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhicnF5d3Z1b3RydWZkenZ5ZGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjQ5MjM4MTIsImV4cCI6MTk4MDQ5OTgxMn0.t8ayO5c6H2X0cZgeNkzbwtMzAkbs1xFlJeuumCboIlQ",
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhicnF5d3Z1b3RydWZkenZ5ZGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjQ5MjM4MTIsImV4cCI6MTk4MDQ5OTgxMn0.t8ayO5c6H2X0cZgeNkzbwtMzAkbs1xFlJeuumCboIlQ"
-            },
+        let { data: oldtasks, error } = await supabase
+            .from('oldtasks')
+            .select("*")
+            .eq('important', true);
 
-        });
-        const result = await response.json()
-        setAllTaskData(result)
-        console.log(result)
-        return result
+        setAllTaskData(oldtasks)
+
+        console.log(oldtasks)
+
+
 
 
     }
 
+    const completeTask = async (taskId) => {
 
+
+        const { data, error } = await supabase
+            .from('oldtasks')
+            .update({ completed: true })
+            .eq('id', taskId)
+
+        setDependancy(dependancy+1)
+
+    }
+
+
+
+    const deleteTask = async (taskId) => {
+
+        const { data, error } = await supabase
+            .from('oldtasks')
+            .delete()
+            .eq('id', taskId);
+
+        setDependancy(dependancy+1)
+
+    }
 
 
     useEffect( () => {
      console.log("change detected")
-        const newFunc = async () => {
+       const newFunc = async () => {
          const newData = await getTaskData()
             setAllTaskData(newData)
         }
-        //getTaskData()
+        getTaskData()
         newFunc()
 
-    //setAllTaskData[]
-     },[])
+
+     },[dependancy])
 
 
 
@@ -175,7 +176,7 @@ const MainTaskPageB = () => {
                 <button className="font-bold text-white bg-teal-600 py-2 px-4 rounded-md hover:bg-teal-700" onClick={async () => {await addNewTask()}}>CREATE TASK</button>
             </div>
 
-            {allTaskData.map(task => <NewTaskCard key="id" {...task} />)}
+            {allTaskData.map(task => <NewTaskCard deleteTask = {deleteTask} completeTask = {completeTask} key={task.id} {...task} />)}
             <form className="sticky bottom-0 right-0 ml-32">
                 <button className="rounded-md bg-teal-600 text-white p-3">Refresh</button>
             </form>
