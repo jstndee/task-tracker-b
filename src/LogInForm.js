@@ -1,9 +1,46 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import image from "./images/linkedin-svgrepo-com.svg";
+import {createClient} from "@supabase/supabase-js";
+import {useRef} from "react";
 
 
 const LogInForm = () => {
+
+    const supabaseUrl = process.env["REACT_APP_SUPABASE_API_ENDPOINT"]
+    const supabaseKey = process.env["REACT_APP_SUPABASE_API_SECRET_KEY"]
+    const supabase = createClient(supabaseUrl, supabaseKey)
+    const emailInput = useRef();
+    const passInput = useRef()
+
+    const handleLoginWithPass = async (e) => {
+        e.preventDefault()
+        let {data: user, error} = await supabase.auth.signInWithPassword({
+
+            email : emailInput.current.value,
+            password: passInput.current.value
+        });
+        console.log(user.user)
+        console.log(user.session)
+        console.log(error)
+
+
+    }
+    const handleLoginWithLinkedin = async () => {
+        let {user,error} = await supabase.auth.signInWithOAuth({
+
+            provider: "linkedin"
+        })
+//after log in save credentials and more
+    }
+    const handleLoginWithGoogle = async () => {
+        let {user,error} = await supabase.auth.signInWithOAuth({
+
+            provider: "google"
+        })
+//after log in save credentials and more
+    }
+
 
 
     return (<div>
@@ -49,7 +86,7 @@ const LogInForm = () => {
                                 <a href="#" className="font-medium text-orange-400">Forgot Password?</a>
                             </div>
                         </div>
-                        <Link to="/maintaskpage"
+                        <Link to="/maintaskpage" onClick={handleLoginWithPass}
                             className="w-full py-3 font-medium text-white bg-teal-600 hover:bg-teal-500 rounded-lg border-indigo-500 hover:shadow inline-flex space-x-2 items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor"

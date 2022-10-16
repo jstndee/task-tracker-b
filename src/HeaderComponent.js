@@ -6,8 +6,8 @@ const HeaderComponent = () => {
 
             <div
                 className="flex flex-col md:flex-row justify-between items-center px-20 md:h-28 p-4 border-b-2 border-gray-300">
-                <div className="font-bold text-teal-600 text-2xl"><Link to="/">ULTRA<span
-                    className="text-orange-400">Task</span></Link></div>
+                <div className="font-bold text-teal-600 text-2xl"><Link to="/">HELP<span
+                    className="text-orange-400">SEEK</span></Link></div>
                 <div className="flex">
 
 
