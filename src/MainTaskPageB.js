@@ -48,9 +48,9 @@ const MainTaskPageB = () => {
             setImportant("true")
         }
 
-        if (important === "true"){
-            setPrivacy("false")
-        }
+        //if (important === "false"){
+            //setImportant("false")
+        //}
 
 
 
@@ -143,7 +143,7 @@ const MainTaskPageB = () => {
          const newData = await getTaskData()
             setAllTaskData(newData)
         }
-        getTaskData()
+        //getTaskData()
         newFunc()
 
 
