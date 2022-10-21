@@ -4,8 +4,8 @@ import {createClient} from "@supabase/supabase-js";
 
 const NewTaskCard = ({title, description, privacy,id,created_at, completed, important, completeTask, deleteTask}) => {
 
-    const supabaseUrl = process.env["REACT_APP_SUPABASE_API_ENDPOINT"]
-    const supabaseKey = process.env["REACT_APP_SUPABASE_API_SECRET_KEY"]
+    const supabaseUrl = process.env.REACT_APP_SUPABASE_API_ENDPOINT
+    const supabaseKey = process.env.REACT_APP_SUPABASE_API_SECRET_KEY
     const supabase = createClient(supabaseUrl, supabaseKey)
 
 

@@ -9,8 +9,8 @@ import {createClient} from "@supabase/supabase-js";
 const MainTaskPageB = () => {
 
 
-    const supabaseUrl = process.env["REACT_APP_SUPABASE_API_ENDPOINT"]
-    const supabaseKey = process.env["REACT_APP_SUPABASE_API_SECRET_KEY"]
+    const supabaseUrl = process.env.REACT_APP_SUPABASE_API_ENDPOINT
+    const supabaseKey = process.env.REACT_APP_SUPABASE_API_SECRET_KEY
     const supabase = createClient(supabaseUrl, supabaseKey)
 
 
@@ -18,9 +18,9 @@ const MainTaskPageB = () => {
     const [title, setTitle] = useState('');
     const [privacy, setPrivacy] = useState('public');
 
-    const [created_date, setDate] = useState(new Date());
+
     const [important, setImportant] = useState("false")
-    const dateNow = Date()
+
     let [dependancy, setDependancy] = useState(0)
 
 
