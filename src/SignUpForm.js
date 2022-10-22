@@ -8,14 +8,12 @@ import {createClient} from "@supabase/supabase-js";
 
 const SignUpForm = () => {
 
-
-
     const supabaseUrl = process.env["REACT_APP_SUPABASE_API_ENDPOINT"]
     const supabaseKey = process.env["REACT_APP_SUPABASE_API_SECRET_KEY"]
     const supabase = createClient(supabaseUrl, supabaseKey)
 
     const emailInput = useRef();
-    const passInput = useRef();
+    const passInput = useRef()
 
     const handleSignUp = async (e) => {
         e.preventDefault()
@@ -27,8 +25,27 @@ const SignUpForm = () => {
 
         console.log(user)
         console.log(error)
-        //Insert additional logic for also adding this same person as a profile in the profile table
+        //console.log(emailInput.current.value)
+        //console.log(passInput.current.value)
+        //console.log(supabase)
+    }
 
+
+    const handleLSignInWithLinkedin = async () => {
+        let {user,error} = await supabase.auth.signInWithOAuth({
+
+            provider: "linkedin"
+        })
+//after log in save credentials and more
+        console.log(user)
+        console.log(error)
+    }
+    const handleSignInWithGoogle = async () => {
+        let {user,error} = await supabase.auth.signInWithOAuth({
+
+            provider: "google"
+        })
+//after log in save credentials and more
     }
 
 
@@ -51,7 +68,7 @@ const SignUpForm = () => {
                         <img src={image} className="w-7 h-7" alt="linkedIn logo"/> <span>Sign up with LinkedIn</span>
                     </button>
                 </div>
-                <form action="" className="my-10">
+                <form onSubmit={handleSignUp}className="my-10">
                     <div className="flex flex-col space-y-5">
 
                         <label htmlFor="email">
@@ -76,7 +93,7 @@ const SignUpForm = () => {
 
                             </div>
                         </div>
-                        <button onClick={handleSignUp}
+                        <button
                             className="w-full py-3 font-medium text-white bg-teal-600 hover:bg-teal-500 rounded-lg border-indigo-500 hover:shadow inline-flex space-x-2 items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor"

@@ -10,6 +10,7 @@ import MainTaskPageB from "./MainTaskPageB";
 import AboutUsPageB from "./AboutUsPageB";
 import ContactUsPageC from "./ContactUsPageC";
 import MeetTheTeam from "./MeetTheTeam";
+import TaskHub from "./TaskHub";
 
 
 const router = createBrowserRouter([
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
                 path: "/team",
                 element: <MeetTheTeam/>
             },
+            {
+                path: "/task-hub/:id",
+                element: <TaskHub/>
+            }
         ]
     }
 

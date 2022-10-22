@@ -1,8 +1,36 @@
 import React from 'react';
+import {useState,useRef} from "react";
+import {useParams} from "react-router-dom";
 
 const TaskHub = () => {
+
+    const params = useParams()
+    const [allTaskData, setAllTaskData] = useState([]);
+    const [currentUser, setCurrentUser] = useState("No user found");
+    const taskTitle = useRef()
+    const taskDescription = useRef()
+    const taskDueDate = useRef()
+    const taskPriority = useRef()
+    const [successAdd, setSuccessAdd] = useState(false)
+    const user = JSON.parse(localStorage.getItem("currentUser"))
+    const userId = user.id
+
+    let [dependancy, setDependancy] = useState(0)
+
+
+
+
+
+
+
+    if(successAdd){
+        setTimeout(() => {
+            setSuccessAdd(false)
+        },2000)
+    }
     return (
         <div className="flex relative">
+            {successAdd ? <p className="text-xl font-bold text-green-500">APPLET ADDED SUCCESSFULLY</p> : <p></p>}
             <div className="w-60 h-screen shadow-md bg-white hidden md:flex">
                 <ul className="relative">
                     <li className="relative">

@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import image from "./images/linkedin-svgrepo-com.svg";
 import {createClient} from "@supabase/supabase-js";
 import {useRef} from "react";
+import {useNavigate} from "react-router-dom";
 
 
 const LogInForm = () => {
@@ -11,37 +12,54 @@ const LogInForm = () => {
     const supabaseKey = process.env["REACT_APP_SUPABASE_API_SECRET_KEY"]
     const supabase = createClient(supabaseUrl, supabaseKey)
     const emailInput = useRef();
-    const passInput = useRef()
+    const passInput = useRef();
+
+    const navigate = useNavigate()
+
+
+    const cacheCurrentUser = (data) => {
+        localStorage.setItem("currentUserId", data.user.id)
+        localStorage.setItem("currentUser", JSON.stringify(data.user))
+        localStorage.setItem("currentSession", JSON.stringify(data.session))
+
+    }
 
     const handleLoginWithPass = async (e) => {
         e.preventDefault()
-        let {data: user, error} = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: emailInput.current.value,
+            password: passInput.current.value,
 
-            email : emailInput.current.value,
-            password: passInput.current.value
-        });
-        console.log(user.user)
-        console.log(user.session)
-        console.log(error)
+        })
+        console.log(data)
+
+        navigate(`/task-hub/:${data.user.id}`)
+
+
+        cacheCurrentUser(data)
 
 
     }
     const handleLoginWithLinkedin = async () => {
-        let {user,error} = await supabase.auth.signInWithOAuth({
+        let {data,user,error} = await supabase.auth.signInWithOAuth({
 
             provider: "linkedin"
         })
 //after log in save credentials and more
+        cacheCurrentUser(data)
     }
     const handleLoginWithGoogle = async () => {
-        let {user,error} = await supabase.auth.signInWithOAuth({
+        let {data, user,error} = await supabase.auth.signInWithOAuth({
 
             provider: "google"
         })
 //after log in save credentials and more
+        cacheCurrentUser(data)
     }
-
-
+    async function signOut() {
+        const { error } = await supabase.auth.signOut()
+        console.log("Signed Out")
+    }
 
     return (<div>
             <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl">
