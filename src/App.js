@@ -1,6 +1,7 @@
 import './index.css';
 import HeaderComponent from "./HeaderComponent";
 import FooterComponent from "./FooterComponent";
+import TaskHub from "./TaskHub";
 
 
 
@@ -13,6 +14,7 @@ import LogInForm from "./LogInForm";
 function App() {
     return (<div>
             <HeaderComponent/>
+            <TaskHub/>
             <Outlet/>
             <FooterComponent/>
 
