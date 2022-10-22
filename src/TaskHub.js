@@ -55,7 +55,10 @@ const TaskHub = () => {
                 </div>
                 <div className="border-2 h-1/2 w-full">
                     <div className="flex justify-between">
-                        <h1 className="text-2xl font-bold text-center">Group name meetings <span>+</span></h1>
+                        <div className="flex flex-row items-center bg-gray-300 rounded-md space-x-2">
+                            <h1 className="text-2xl font-bold text-center">Group name meetings</h1>
+                            <label htmlFor="my-modal-1" className="text-center btn btn-xs modal-button h-full">+</label>
+                        </div>
                         <p className="text-center cursor-pointer">All Meetings</p>
                         <p className="text-center cursor-pointer">Meetings Due Soon</p>
                         <p className="text-center cursor-pointer">Completed Meetings</p>
@@ -67,10 +70,44 @@ const TaskHub = () => {
             <div className="modal">
                 <div className="modal-box relative">
                     <label htmlFor="my-modal-3" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-                    <h3 className="text-lg font-bold">Congratulations random Internet user!</h3>
-                    <p className="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
+                    <h3 className="text-lg font-bold">Create Task Below</h3>
+                    <form>
+                        <input type="text"className="" placeholder="Title"/>
+                        <input type="text"className="" placeholder="Description"/>
+                        <select>
+                            <option value="">Assign To</option>
+                            <option value="bob">Bob</option>
+                        </select>
+                        <select>
+                            <option value="">Priority</option>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                        <input type="date" placeholder="Due Date"/>
+                        <input type="submit" value="Create Task"/>
+                    </form>
                 </div>
             </div>
+            <input type="checkbox" id="my-modal-1" className="modal-toggle" />
+            <div className="modal">
+                <div className="modal-box relative">
+                    <label htmlFor="my-modal-1" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                    <h3 className="text-lg font-bold">Create Meeting Below</h3>
+                    <form>
+                        <input type="text"className="" placeholder="Title"/>
+                        <input type="text"className="" placeholder="Description"/>
+                        <select>
+                            <option value="">Assign To</option>
+                            <option value="bob">Bob</option>
+                        </select>
+                        <input type="date" placeholder="Date"/>
+                        <input type="time" placeholder="Time"/>
+                        <input type="submit" value="Create Meeting"/>
+                    </form>
+                </div>
+            </div>
+
 
         </div>
     );
