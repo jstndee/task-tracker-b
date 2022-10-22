@@ -9,12 +9,13 @@ import {Outlet} from "react-router-dom";
 import NewTaskCard from "./NewTaskCard";
 import MainTaskPageB from "./MainTaskPageB";
 import LogInForm from "./LogInForm";
+import GroupNav from "./GroupNav";
 
 
 function App() {
     return (<div>
             <HeaderComponent/>
-            <TaskHub/>
+            <GroupNav/>
             <Outlet/>
             <FooterComponent/>
 
