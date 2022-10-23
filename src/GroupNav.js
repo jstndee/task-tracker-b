@@ -1,6 +1,70 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {useRef} from "react";
+import {createClient} from "@supabase/supabase-js";
 
 const GroupNav = () => {
+
+
+    const supabaseUrl = process.env.REACT_APP_SUPABASE_API_ENDPOINT
+    const supabaseKey = process.env.REACT_APP_SUPABASE_API_SECRET_KEY
+
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    const groupName = useRef()
+    const groupDescription = useRef()
+    const groupImgUrl = useRef()
+    const [groupDependancy, setGroupDependancy] = useState()
+    const [allGroupData, setAllGroupData] = useState([])
+
+    const user = JSON.parse(localStorage.getItem("currentUser"))
+
+
+    const getGroupData = async () => {
+
+        let { data: groups, error } = await supabase
+            .from('groups')
+            .select('*');
+
+        setAllGroupData(groups)
+        return groups
+    }
+
+    const addNewGroup = async (e) => {
+
+        e.preventDefault()
+
+        let newGroupName = groupName.current.value
+        let newGroupDescription = groupDescription.current.value
+        let newGroupImgUrl = groupImgUrl.current.value
+
+
+        //console.log(user.id)
+
+
+        const newGroup = [{name: newGroupName, description: newGroupDescription, image_url:newGroupImgUrl, profile_id: user.id}]
+
+
+        const { data, error } = await supabase
+            .from('groups')
+            .insert(newGroup);
+
+        //setSuccessAdd(true)
+        setGroupDependancy(groupDependancy + 1)
+    }
+    useEffect( () => {
+        console.log("change detected")
+        const newFunc = async () => {
+            const newData = await getGroupData()
+            setAllGroupData(newData)
+        }
+        //getTaskData()
+        newFunc()
+
+
+    },[groupDependancy])
+
+
+
     return (
         <div>
             <label htmlFor="my-modal-5" className="btn modal-button text-center btn flex justify-center">Create Group</label>
@@ -55,10 +119,11 @@ const GroupNav = () => {
                 <div className="modal-box relative">
                     <label htmlFor="my-modal-5" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                     <h3 className="text-lg font-bold">Create Group Below</h3>
-                    <form>
-                        <input type="text" placeholder="Group Name"/>
-                        <input type="text" placeholder="Group Description"/>
-                        <input type="text" placeholder="Group Icon/Image URL"/>
+                    <form onSubmit={addNewGroup}>
+                        <input type="text" placeholder="Group Name" ref={groupName}/>
+                        <input type="text" placeholder="Group Description" ref={groupDescription}/>
+                        <input type="text" placeholder="Group Icon/Image URL" ref={groupImgUrl}/>
+                        <input type="submit" value="Create Group"/>
                     </form>
                 </div>
             </div>

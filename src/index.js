@@ -11,6 +11,7 @@ import AboutUsPageB from "./AboutUsPageB";
 import ContactUsPageC from "./ContactUsPageC";
 import MeetTheTeam from "./MeetTheTeam";
 import TaskHub from "./TaskHub";
+import GroupNav from "./GroupNav";
 
 
 const router = createBrowserRouter([
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             {
                 path: "/task-hub/:id",
                 element: <TaskHub/>
+            },
+            {
+                path: "/group-nav",
+                element: <GroupNav/>
             }
         ]
     }

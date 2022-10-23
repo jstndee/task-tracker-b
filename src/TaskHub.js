@@ -3,6 +3,7 @@ import {useState,useRef} from "react";
 import {useParams} from "react-router-dom";
 import {createClient} from "@supabase/supabase-js";
 import NewTaskCard from "./NewTaskCard";
+import MeetingCard from "./MeetingCard";
 
 const TaskHub = () => {
 
@@ -13,17 +14,24 @@ const TaskHub = () => {
 
     const params = useParams()
     const [allTaskData, setAllTaskData] = useState([]);
+    const [allMeetingData, setAllMeetingData] = useState([]);
     const [currentUser, setCurrentUser] = useState("No user found");
     const taskTitle = useRef()
     const taskDescription = useRef()
     const taskDueDate = useRef()
     const taskPriority = useRef()
     const taskAssignee = useRef()
+    const meetingTitle = useRef()
+    const meetingDescription = useRef()
+    const meetingTime = useRef()
+    const meetingDate = useRef()
+    const meetingDuration = useRef()
     const [successAdd, setSuccessAdd] = useState(false)
     const user = JSON.parse(localStorage.getItem("currentUser"))
     //const userId = user.id
 
     let [dependancy, setDependancy] = useState(0)
+    let [meetingDependancy, setMeetingDependancy] = useState(0)
 
     const getTaskData = async () => {
 
@@ -33,10 +41,17 @@ const TaskHub = () => {
 
         setAllTaskData(oldtasks)
         return oldtasks
-
-
-
     }
+    const getMeetingData = async () => {
+
+        let { data: meetings, error } = await supabase
+            .from('meetings')
+            .select('*');
+
+        setAllMeetingData(meetings)
+        return meetings
+    }
+
     const getCompletedTasks = async () => {
         let { data: oldtasks, error } = await supabase
             .from('oldtasks')
@@ -67,6 +82,29 @@ const TaskHub = () => {
 
         setSuccessAdd(true)
         setDependancy(dependancy + 1)
+    }
+    const addNewMeeting = async (e) => {
+
+        e.preventDefault()
+
+        let newMeetingTitle = meetingTitle.current.value
+        let newMeetingDescription = meetingDescription.current.value
+        let newMeetingDate = meetingDate.current.value
+        let newMeetingTime = meetingTime.current.value
+        let newMeetingDuration = meetingDuration.current.value
+
+        console.log(user.id)
+
+
+        const newMeeting = [{title: newMeetingTitle, description: newMeetingDescription, date: newMeetingDate, time: newMeetingTime, duration: newMeetingDuration, profile_id: user.id}]
+
+
+        const { data, error } = await supabase
+            .from('meetings')
+            .insert(newMeeting);
+
+        //setSuccessAdd(true) make new success add for meetings
+        setMeetingDependancy(meetingDependancy + 1)
     }
     const completeTask = async (taskId) => {
 
@@ -104,6 +142,18 @@ const TaskHub = () => {
 
 
     },[dependancy])
+
+    useEffect( () => {
+        console.log("change detected")
+        const newFuncM = async () => {
+            const newDataM = await getMeetingData()
+            setAllMeetingData(newDataM)
+        }
+        //getTaskData()
+        newFuncM()
+
+
+    },[meetingDependancy])
 
 
 
@@ -167,6 +217,14 @@ const TaskHub = () => {
                         <p className="text-center cursor-pointer">Tasks Due Soon</p>
                         <p className="text-center cursor-pointer">Completed Tasks</p>
                     </div>
+                    <div className="flex space-x-8">
+                        <p>Title</p>
+                        <p>Description</p>
+                        <p>Due Date</p>
+                        <p>Priority</p>
+                        <p>Assigned By</p>
+
+                    </div>
                     {allTaskData.map(task => <NewTaskCard deleteTask = {deleteTask} completeTask = {completeTask} key={task.id} {...task} />)}
                 </div>
                 <div className="border-2 h-1/2 w-full lg:mt-4 sm:mt-20">
@@ -179,6 +237,7 @@ const TaskHub = () => {
                         <p className="text-center cursor-pointer">Meetings Due Soon</p>
                         <p className="text-center cursor-pointer">Completed Meetings</p>
                     </div>
+                    {allMeetingData.map(meeting => <MeetingCard deleteTask = {deleteTask} completeTask = {completeTask} key={meeting.id} {...meeting} />)}
                 </div>
 
             </div>
@@ -210,15 +269,17 @@ const TaskHub = () => {
                 <div className="modal-box relative">
                     <label htmlFor="my-modal-1" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                     <h3 className="text-lg font-bold">Create Meeting Below</h3>
-                    <form>
-                        <input type="text"className="" placeholder="Title"/>
-                        <input type="text"className="" placeholder="Description"/>
+                    <form onSubmit={addNewMeeting}>
+                        <input type="text"className="" placeholder="Title" ref={meetingTitle}/>
+                        <input type="text"className="" placeholder="Description" ref={meetingDescription}/>
+                        <input type="date" placeholder="Date" ref={meetingDate}/>
+                        <input type="time" placeholder="Time" ref={meetingTime}/>
                         <select>
-                            <option value="">Assign To</option>
-                            <option value="bob">Bob</option>
+                            <option value="">Duration</option>
+                            <option value="20 minutes" ref={meetingDuration}>20 minutes</option>
+                            <option value="40 minutes" ref={meetingDuration}>40 minutes</option>
+                            <option value="1 hour" ref={meetingDuration}>1 hour</option>
                         </select>
-                        <input type="date" placeholder="Date"/>
-                        <input type="time" placeholder="Time"/>
                         <input type="submit" value="Create Meeting"/>
                     </form>
                 </div>
