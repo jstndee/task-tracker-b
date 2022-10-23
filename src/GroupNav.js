@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useRef} from "react";
 import {createClient} from "@supabase/supabase-js";
+import NewTaskCard from "./NewTaskCard";
+import GroupCard from "./GroupCard";
 
 const GroupNav = () => {
 
@@ -13,7 +15,7 @@ const GroupNav = () => {
     const groupName = useRef()
     const groupDescription = useRef()
     const groupImgUrl = useRef()
-    const [groupDependancy, setGroupDependancy] = useState()
+    const [groupDependancy, setGroupDependancy] = useState(0)
     const [allGroupData, setAllGroupData] = useState([])
 
     const user = JSON.parse(localStorage.getItem("currentUser"))
@@ -71,6 +73,7 @@ const GroupNav = () => {
             <p className="text-center">Or Join One Below</p>
             <hr/>
             <div className="carousel carousel-center max-w-md p-4 space-x-4 bg-neutral rounded-box mx-auto">
+                {allGroupData.map(group => <GroupCard key={group.id} {...group} />)}
                 <div className="card card-compact w-96 bg-base-100 shadow-xl carousel-item relative">
                     <figure><img src="https://placeimg.com/400/225/arch" alt="Shoes" /></figure>
                     <div className="card-body">
