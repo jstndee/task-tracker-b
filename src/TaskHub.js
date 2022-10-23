@@ -52,11 +52,13 @@ const TaskHub = () => {
 
         let newTaskTitle = taskTitle.current.value
         let newTaskDescription = taskDescription.current.value
-        //let newTaskPrio = taskPriority.current.value
+        let newTaskPrio = taskPriority.current.value
         let newTaskDueDate = taskDueDate.current.value
 
+        console.log(user.id)
 
-        const newTask = [{title: newTaskTitle, description: newTaskDescription, priority: "Low", due_date: newTaskDueDate, profile_assignee_id: user,profile_id: user, created_at: "10/6/2022", completed:"false",}]
+
+        const newTask = [{title: newTaskTitle, description: newTaskDescription, priority: newTaskPrio, due_date: newTaskDueDate, profile_assignee_id: user.id,profile_id: user.id, completed:"false",}]
 
 
         const { data, error } = await supabase
@@ -157,7 +159,7 @@ const TaskHub = () => {
                 <div className="border-2 h-1/2 w-full">
                     <div className="flex justify-between">
                         <div className="flex flex-row items-center bg-gray-300 rounded-md space-x-2">
-                            <h1 className="text-2xl font-bold text-center">Group name tasks</h1>
+                            <h1 className="md:text-2xl sm:text-2xs font-bold text-center">Group name tasks</h1>
                             <label htmlFor="my-modal-3" className="text-center btn btn-xs modal-button h-full">+</label>
                         </div>
                         <p className="text-center cursor-pointer">All Tasks</p>
@@ -167,10 +169,10 @@ const TaskHub = () => {
                     </div>
                     {allTaskData.map(task => <NewTaskCard deleteTask = {deleteTask} completeTask = {completeTask} key={task.id} {...task} />)}
                 </div>
-                <div className="border-2 h-1/2 w-full">
+                <div className="border-2 h-1/2 w-full lg:mt-4 sm:mt-20">
                     <div className="flex justify-between">
                         <div className="flex flex-row items-center bg-gray-300 rounded-md space-x-2">
-                            <h1 className="text-2xl font-bold text-center">Group name meetings</h1>
+                            <h1 className="md:text-2xl sm:text-2xs font-bold text-center">Group name meetings</h1>
                             <label htmlFor="my-modal-1" className="text-center btn btn-xs modal-button h-full">+</label>
                         </div>
                         <p className="text-center cursor-pointer">All Meetings</p>
@@ -194,9 +196,9 @@ const TaskHub = () => {
                         </select>
                         <select>
                             <option value="">Priority</option>
-                            <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
-                            <option value="High">High</option>
+                            <option value="Low" ref={taskPriority}>Low</option>
+                            <option value="Medium" ref={taskPriority}>Medium</option>
+                            <option value="High" ref={taskPriority}>High</option>
                         </select>
                         <input type="date" placeholder="Due Date" ref={taskDueDate}/>
                         <input type="submit" value="Create Task"/>

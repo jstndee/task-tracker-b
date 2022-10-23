@@ -82,13 +82,13 @@ const LogInForm = () => {
                     <div className="flex flex-col space-y-5">
                         <label htmlFor="email">
 
-                            <input id="email" name="email" type="email"
+                            <input id="email" name="email" type="email" ref={emailInput}
                                    className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
                                    placeholder="Enter email address"/>
                         </label>
                         <label htmlFor="password">
 
-                            <input id="password" name="password" type="password"
+                            <input id="password" name="password" type="password" ref={passInput}
                                    className="w-full py-3 border border-slate-200 rounded-xl px-3 focus:outline-none focus:border-slate-500 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
                                    placeholder="Enter your password"/>
                         </label>
