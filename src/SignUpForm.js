@@ -1,52 +1,51 @@
 import React from 'react';
 import {useState} from "react";
+import {useRef} from "react";
 import {Link} from "react-router-dom";
 import image from "./images/linkedin-svgrepo-com.svg";
+import {createClient} from "@supabase/supabase-js";
+
+
 const SignUpForm = () => {
-    const [name, setName] = useState("")
-    const [password, setPassword] = useState("")
-    const [email, setEmail] = useState("")
-    const USER_DATA_API_URL = "https://hbrqywvuotrufdzvyden.supabase.co/rest/v1/UsersB"
+
+    const supabaseUrl = process.env["REACT_APP_SUPABASE_API_ENDPOINT"]
+    const supabaseKey = process.env["REACT_APP_SUPABASE_API_SECRET_KEY"]
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    const emailInput = useRef();
+    const passInput = useRef()
+
+    const handleSignUp = async (e) => {
+        e.preventDefault()
+
+        let {user, error} = await supabase.auth.signUp({
+            email: emailInput.current.value,
+            password: passInput.current.value})
 
 
-    const handlePassInput = (event) => {
-        setPassword(event.target.value)
-    }
-    const handleNameInput = (event) => {
+        console.log(user)
+        console.log(error)
 
-        setName(event.target.value)
-
-
-
-    }
-    const handleEmailInput = (event) => {
-        setEmail(event.target.value);
-    }
-
-    const addNewUser = async () => {
-
-        const newUser = [{name:name, email:email, password:password}]
-
-        const response = await fetch(USER_DATA_API_URL, {
-            method:"POST",
-            headers: {
-                "Content-Type":"application/json",
-                apikey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhicnF5d3Z1b3RydWZkenZ5ZGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjQ5MjM4MTIsImV4cCI6MTk4MDQ5OTgxMn0.t8ayO5c6H2X0cZgeNkzbwtMzAkbs1xFlJeuumCboIlQ",
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhicnF5d3Z1b3RydWZkenZ5ZGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjQ5MjM4MTIsImV4cCI6MTk4MDQ5OTgxMn0.t8ayO5c6H2X0cZgeNkzbwtMzAkbs1xFlJeuumCboIlQ",
-
-            },
-            body: JSON.stringify(newUser)
-
-
-        });
-        //const result = await response.json()
-        //setAllTaskData(result)
-        //console.log(result)
-        //return result
-
-
+        //add info to profiles table here too
     }
 
+
+    const handleLSignInWithLinkedin = async () => {
+        let {user,error} = await supabase.auth.signInWithOAuth({
+
+            provider: "linkedin"
+        })
+//after log in save credentials and more
+        console.log(user)
+        console.log(error)
+    }
+    const handleSignInWithGoogle = async () => {
+        let {user,error} = await supabase.auth.signInWithOAuth({
+
+            provider: "google"
+        })
+//after log in save credentials and more
+    }
 
 
 
@@ -68,25 +67,20 @@ const SignUpForm = () => {
                         <img src={image} className="w-7 h-7" alt="linkedIn logo"/> <span>Sign up with LinkedIn</span>
                     </button>
                 </div>
-                <form action="" className="my-10">
+                <form onSubmit={handleSignUp}className="my-10">
                     <div className="flex flex-col space-y-5">
-                        <label htmlFor="fname">
 
-                            <input id="fname" name="fname" type="text"
-                                   className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
-                                   placeholder="Enter Your name" onChange={handleNameInput}/>
-                        </label>
                         <label htmlFor="email">
 
                             <input id="email" name="email" type="email"
                                    className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
-                                   placeholder="Enter email address" onChange={handleEmailInput}/>
+                                   placeholder="Enter email address" ref={emailInput}/>
                         </label>
                         <label htmlFor="password">
 
                             <input id="password" name="password" type="password"
                                    className="w-full py-3 border border-slate-200 rounded-xl px-3 focus:outline-none focus:border-slate-500 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
-                                   placeholder="Enter your password" onChange={handlePassInput}/>
+                                   placeholder="Enter your password" ref={passInput}/>
                         </label>
                         <div className="flex flex-row justify-between">
                             <div>
@@ -98,7 +92,7 @@ const SignUpForm = () => {
 
                             </div>
                         </div>
-                        <button onClick={async () => {await addNewUser()}}
+                        <button
                             className="w-full py-3 font-medium text-white bg-teal-600 hover:bg-teal-500 rounded-lg border-indigo-500 hover:shadow inline-flex space-x-2 items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor"

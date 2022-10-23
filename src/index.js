@@ -10,6 +10,8 @@ import MainTaskPageB from "./MainTaskPageB";
 import AboutUsPageB from "./AboutUsPageB";
 import ContactUsPageC from "./ContactUsPageC";
 import MeetTheTeam from "./MeetTheTeam";
+import TaskHub from "./TaskHub";
+import GroupNav from "./GroupNav";
 
 
 const router = createBrowserRouter([
@@ -30,8 +32,8 @@ const router = createBrowserRouter([
                 element: <LogInPage/>
             },
             {
-                path: "/maintaskpage",
-                element: <MainTaskPageB/>
+                path: "/task-hub",
+                element: <TaskHub/>
             },
             {
                 path: "/about",
@@ -45,6 +47,14 @@ const router = createBrowserRouter([
                 path: "/team",
                 element: <MeetTheTeam/>
             },
+            {
+                path: "/task-hub/:id",
+                element: <TaskHub/>
+            },
+            {
+                path: "/group-nav",
+                element: <GroupNav/>
+            }
         ]
     }
 

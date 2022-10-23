@@ -1,10 +1,65 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import image from "./images/linkedin-svgrepo-com.svg";
+import {createClient} from "@supabase/supabase-js";
+import {useRef} from "react";
+import {useNavigate} from "react-router-dom";
 
 
 const LogInForm = () => {
 
+    const supabaseUrl = process.env["REACT_APP_SUPABASE_API_ENDPOINT"]
+    const supabaseKey = process.env["REACT_APP_SUPABASE_API_SECRET_KEY"]
+    const supabase = createClient(supabaseUrl, supabaseKey)
+    const emailInput = useRef();
+    const passInput = useRef();
+
+    const navigate = useNavigate()
+
+
+    const cacheCurrentUser = (data) => {
+        localStorage.setItem("currentUserId", data.user.id)
+        localStorage.setItem("currentUser", JSON.stringify(data.user))
+        localStorage.setItem("currentSession", JSON.stringify(data.session))
+
+    }
+
+    const handleLoginWithPass = async (e) => {
+        e.preventDefault()
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: emailInput.current.value,
+            password: passInput.current.value,
+
+        })
+        console.log(data)
+
+        navigate(`/task-hub/:${data.user.id}`)
+
+
+        cacheCurrentUser(data)
+
+
+    }
+    const handleLoginWithLinkedin = async () => {
+        let {data,user,error} = await supabase.auth.signInWithOAuth({
+
+            provider: "linkedin"
+        })
+//after log in save credentials and more
+        cacheCurrentUser(data)
+    }
+    const handleLoginWithGoogle = async () => {
+        let {data, user,error} = await supabase.auth.signInWithOAuth({
+
+            provider: "google"
+        })
+//after log in save credentials and more
+        cacheCurrentUser(data)
+    }
+    async function signOut() {
+        const { error } = await supabase.auth.signOut()
+        console.log("Signed Out")
+    }
 
     return (<div>
             <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl">
@@ -27,13 +82,13 @@ const LogInForm = () => {
                     <div className="flex flex-col space-y-5">
                         <label htmlFor="email">
 
-                            <input id="email" name="email" type="email"
+                            <input id="email" name="email" type="email" ref={emailInput}
                                    className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
                                    placeholder="Enter email address"/>
                         </label>
                         <label htmlFor="password">
 
-                            <input id="password" name="password" type="password"
+                            <input id="password" name="password" type="password" ref={passInput}
                                    className="w-full py-3 border border-slate-200 rounded-xl px-3 focus:outline-none focus:border-slate-500 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
                                    placeholder="Enter your password"/>
                         </label>
@@ -49,7 +104,7 @@ const LogInForm = () => {
                                 <a href="#" className="font-medium text-orange-400">Forgot Password?</a>
                             </div>
                         </div>
-                        <Link to="/maintaskpage"
+                        <Link to="/maintaskpage" onClick={handleLoginWithPass}
                             className="w-full py-3 font-medium text-white bg-teal-600 hover:bg-teal-500 rounded-lg border-indigo-500 hover:shadow inline-flex space-x-2 items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor"
