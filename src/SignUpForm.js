@@ -25,9 +25,8 @@ const SignUpForm = () => {
 
         console.log(user)
         console.log(error)
-        //console.log(emailInput.current.value)
-        //console.log(passInput.current.value)
-        //console.log(supabase)
+
+        //add info to profiles table here too
     }
 
 

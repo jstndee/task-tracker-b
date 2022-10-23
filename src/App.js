@@ -15,7 +15,6 @@ import GroupNav from "./GroupNav";
 function App() {
     return (<div>
             <HeaderComponent/>
-            <GroupNav/>
             <Outlet/>
             <FooterComponent/>
 

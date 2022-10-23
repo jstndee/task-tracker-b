@@ -1,8 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useState,useRef} from "react";
 import {useParams} from "react-router-dom";
+import {createClient} from "@supabase/supabase-js";
+import NewTaskCard from "./NewTaskCard";
 
 const TaskHub = () => {
+
+    const supabaseUrl = process.env.REACT_APP_SUPABASE_API_ENDPOINT
+    const supabaseKey = process.env.REACT_APP_SUPABASE_API_SECRET_KEY
+
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
     const params = useParams()
     const [allTaskData, setAllTaskData] = useState([]);
@@ -11,12 +18,90 @@ const TaskHub = () => {
     const taskDescription = useRef()
     const taskDueDate = useRef()
     const taskPriority = useRef()
+    const taskAssignee = useRef()
     const [successAdd, setSuccessAdd] = useState(false)
     const user = JSON.parse(localStorage.getItem("currentUser"))
-    const userId = user.id
+    //const userId = user.id
 
     let [dependancy, setDependancy] = useState(0)
 
+    const getTaskData = async () => {
+
+        let { data: oldtasks, error } = await supabase
+            .from('oldtasks')
+            .select('*');
+
+        setAllTaskData(oldtasks)
+        return oldtasks
+
+
+
+    }
+    const getCompletedTasks = async () => {
+        let { data: oldtasks, error } = await supabase
+            .from('oldtasks')
+            .select("*")
+            .eq('completed', true);
+
+        setAllTaskData(oldtasks)
+
+    }
+    const addNewTask = async (e) => {
+
+        e.preventDefault()
+
+        let newTaskTitle = taskTitle.current.value
+        let newTaskDescription = taskDescription.current.value
+        //let newTaskPrio = taskPriority.current.value
+        let newTaskDueDate = taskDueDate.current.value
+
+
+        const newTask = [{title: newTaskTitle, description: newTaskDescription, priority: "Low", due_date: newTaskDueDate, profile_assignee_id: user,profile_id: user, created_at: "10/6/2022", completed:"false",}]
+
+
+        const { data, error } = await supabase
+            .from('oldtasks')
+            .insert(newTask);
+
+        setSuccessAdd(true)
+        setDependancy(dependancy + 1)
+    }
+    const completeTask = async (taskId) => {
+
+
+        const { data, error } = await supabase
+            .from('oldtasks')
+            .update({ completed: true })
+            .eq('id', taskId)
+
+        setDependancy(dependancy+1)
+
+    }
+
+
+
+    const deleteTask = async (taskId) => {
+
+        const { data, error } = await supabase
+            .from('oldtasks')
+            .delete()
+            .eq('id', taskId);
+
+        setDependancy(dependancy+1)
+
+    }
+
+    useEffect( () => {
+        console.log("change detected")
+        const newFunc = async () => {
+            const newData = await getTaskData()
+            setAllTaskData(newData)
+        }
+        //getTaskData()
+        newFunc()
+
+
+    },[dependancy])
 
 
 
@@ -30,7 +115,7 @@ const TaskHub = () => {
     }
     return (
         <div className="flex relative">
-            {successAdd ? <p className="text-xl font-bold text-green-500">APPLET ADDED SUCCESSFULLY</p> : <p></p>}
+            {successAdd ? <p className="text-xl font-bold text-green-500">TASK ADDED SUCCESSFULLY</p> : <p></p>}
             <div className="w-60 h-screen shadow-md bg-white hidden md:flex">
                 <ul className="relative">
                     <li className="relative">
@@ -80,6 +165,7 @@ const TaskHub = () => {
                         <p className="text-center cursor-pointer">Tasks Due Soon</p>
                         <p className="text-center cursor-pointer">Completed Tasks</p>
                     </div>
+                    {allTaskData.map(task => <NewTaskCard deleteTask = {deleteTask} completeTask = {completeTask} key={task.id} {...task} />)}
                 </div>
                 <div className="border-2 h-1/2 w-full">
                     <div className="flex justify-between">
@@ -99,9 +185,9 @@ const TaskHub = () => {
                 <div className="modal-box relative">
                     <label htmlFor="my-modal-3" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                     <h3 className="text-lg font-bold">Create Task Below</h3>
-                    <form>
-                        <input type="text"className="" placeholder="Title"/>
-                        <input type="text"className="" placeholder="Description"/>
+                    <form onSubmit={addNewTask}>
+                        <input type="text"className="" placeholder="Title"ref={taskTitle}/>
+                        <input type="text"className="" placeholder="Description" ref={taskDescription}/>
                         <select>
                             <option value="">Assign To</option>
                             <option value="bob">Bob</option>
@@ -112,7 +198,7 @@ const TaskHub = () => {
                             <option value="Medium">Medium</option>
                             <option value="High">High</option>
                         </select>
-                        <input type="date" placeholder="Due Date"/>
+                        <input type="date" placeholder="Due Date" ref={taskDueDate}/>
                         <input type="submit" value="Create Task"/>
                     </form>
                 </div>

@@ -31,8 +31,8 @@ const router = createBrowserRouter([
                 element: <LogInPage/>
             },
             {
-                path: "/maintaskpage",
-                element: <MainTaskPageB/>
+                path: "/task-hub",
+                element: <TaskHub/>
             },
             {
                 path: "/about",
