@@ -4,6 +4,7 @@ import {useParams} from "react-router-dom";
 import {createClient} from "@supabase/supabase-js";
 import NewTaskCard from "./NewTaskCard";
 import MeetingCard from "./MeetingCard";
+import GroupNameCard from "./GroupNameCard";
 
 const TaskHub = () => {
 
@@ -15,6 +16,7 @@ const TaskHub = () => {
     const params = useParams()
     const [allTaskData, setAllTaskData] = useState([]);
     const [allMeetingData, setAllMeetingData] = useState([]);
+    const [userGroupNames, setUserGroupNames] = useState([]);
     const [currentUser, setCurrentUser] = useState("No user found");
     const taskTitle = useRef()
     const taskDescription = useRef()
@@ -29,6 +31,8 @@ const TaskHub = () => {
     const [successAdd, setSuccessAdd] = useState(false)
     const user = JSON.parse(localStorage.getItem("currentUser"))
     //const userId = user.id
+
+    const [selectedGroup, setSelectedGroup] = useState("")
 
     let [dependancy, setDependancy] = useState(0)
     let [meetingDependancy, setMeetingDependancy] = useState(0)
@@ -131,6 +135,43 @@ const TaskHub = () => {
 
     }
 
+    const getUserGroups = async () => {
+
+
+
+        let { data: user_groups, error } = await supabase
+            .from('group_members')
+            .select('group_id')
+            .eq("profile_id", user.id)
+
+            //console.log(user_groups)
+
+
+
+        let { data: group_names} = await supabase
+            .from('group_members')
+            .select(`
+    group_id,
+    groups (
+      name
+    )
+  `).eq("profile_id", user.id)
+
+    //console.log(group_names[0].groups.name)
+        //console.log(group_names[1].groups.name)
+        setUserGroupNames(group_names)
+
+        //const newGroupNames = {...group_names}
+        console.log(userGroupNames)
+
+        console.log(userGroupNames.map(name => name.groups.name));
+
+
+
+
+    }
+
+
     useEffect( () => {
         console.log("change detected")
         const newFunc = async () => {
@@ -155,7 +196,22 @@ const TaskHub = () => {
 
     },[meetingDependancy])
 
+    const groupSelector = async (e) => {
+        //get all groups and filter the ones based on the name
 
+        const groupSelected = e.currentTarget.textContent
+        console.log(groupSelected)
+
+        let { data: groups, error } = await supabase
+            .from('groups')
+            .select("*")
+
+            // Filters
+            .eq('name', {groupSelected})
+
+        console.log(groups)
+
+    }
 
 
 
@@ -178,8 +234,12 @@ const TaskHub = () => {
                                 <path fill="currentColor"
                                       d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path>
                             </svg>
-                            <span>Sidenav link 1</span>
+                            <span onClick={getUserGroups}>Groups</span>
+
                         </a>
+                        <div className="flex flex-col items-center">
+                        {userGroupNames.map( name => <GroupNameCard name={name.groups.name} groupSelector={groupSelector}/>)}
+                        </div>
                     </li>
                     <li className="relative">
                         <a className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
@@ -237,6 +297,7 @@ const TaskHub = () => {
                         <p className="text-center cursor-pointer">Meetings Due Soon</p>
                         <p className="text-center cursor-pointer">Completed Meetings</p>
                     </div>
+
                     {allMeetingData.map(meeting => <MeetingCard deleteTask = {deleteTask} completeTask = {completeTask} key={meeting.id} {...meeting} />)}
                 </div>
 

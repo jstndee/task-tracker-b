@@ -68,10 +68,18 @@ const GroupNav = () => {
 
     },[groupDependancy])
 
-    const joinGroup = () => {
+    const joinGroup = async (groupId) => {
 
+
+        const { data, error } = await supabase
+            .from('group_members')
+            .insert([
+                { group_id: groupId, profile_id: user.id },
+        ])
 
         navigate(`/task-hub/:${user.id}`)
+
+        //console.log(groupId)
     }
 
 
