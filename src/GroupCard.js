@@ -1,6 +1,6 @@
 import React from 'react';
 
-const GroupCard = ({name, description, image_url, profile_id}) => {
+const GroupCard = ({name, description, image_url, profile_id, joinGroup}) => {
     return (
         <>
             <div className="card card-compact w-96 bg-base-100 shadow-xl carousel-item relative">
@@ -12,7 +12,7 @@ const GroupCard = ({name, description, image_url, profile_id}) => {
                     <p>Member Count</p>
                     <p>Group Rating</p>
                     <div className="card-actions justify-end">
-                        <button className="btn btn-primary">Join Group</button>
+                        <button onClick={joinGroup} className="btn btn-primary">Join Group</button>
                     </div>
                 </div>
             </div>

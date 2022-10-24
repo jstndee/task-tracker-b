@@ -31,10 +31,7 @@ const router = createBrowserRouter([
                 path: "/loginpage",
                 element: <LogInPage/>
             },
-            {
-                path: "/task-hub",
-                element: <TaskHub/>
-            },
+
             {
                 path: "/about",
                 element: <AboutUsPageB/>
@@ -52,7 +49,7 @@ const router = createBrowserRouter([
                 element: <TaskHub/>
             },
             {
-                path: "/group-nav",
+                path: "/group-nav/:id",
                 element: <GroupNav/>
             }
         ]

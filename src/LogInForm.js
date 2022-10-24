@@ -33,7 +33,8 @@ const LogInForm = () => {
         })
         console.log(data)
 
-        navigate(`/task-hub/:${data.user.id}`)
+
+        navigate(`/group-nav/:${data.user.id}`)
 
 
         cacheCurrentUser(data)

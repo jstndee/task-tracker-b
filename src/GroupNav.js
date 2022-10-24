@@ -3,6 +3,7 @@ import {useRef} from "react";
 import {createClient} from "@supabase/supabase-js";
 import NewTaskCard from "./NewTaskCard";
 import GroupCard from "./GroupCard";
+import {useNavigate} from "react-router-dom";
 
 const GroupNav = () => {
 
@@ -11,6 +12,8 @@ const GroupNav = () => {
     const supabaseKey = process.env.REACT_APP_SUPABASE_API_SECRET_KEY
 
     const supabase = createClient(supabaseUrl, supabaseKey)
+
+    const navigate = useNavigate()
 
     const groupName = useRef()
     const groupDescription = useRef()
@@ -65,6 +68,11 @@ const GroupNav = () => {
 
     },[groupDependancy])
 
+    const joinGroup = () => {
+
+
+        navigate(`/task-hub/:${user.id}`)
+    }
 
 
     return (
@@ -73,7 +81,7 @@ const GroupNav = () => {
             <p className="text-center">Or Join One Below</p>
             <hr/>
             <div className="carousel carousel-center max-w-md p-4 space-x-4 bg-neutral rounded-box mx-auto">
-                {allGroupData.map(group => <GroupCard key={group.id} {...group} />)}
+                {allGroupData.map(group => <GroupCard key={group.id} joinGroup = {joinGroup}{...group} />)}
                 <div className="card card-compact w-96 bg-base-100 shadow-xl carousel-item relative">
                     <figure><img src="https://placeimg.com/400/225/arch" alt="Shoes" /></figure>
                     <div className="card-body">
