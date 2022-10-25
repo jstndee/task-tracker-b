@@ -13,7 +13,7 @@ const MeetingCard = ({title, description, time,duration, profile_id,date, delete
 
     return (
 
-        <div className="flex justify-between border-2 border-black items-center text-center mt-2 rounded-md bg-white">
+        <div className="flex justify-between border-2 border-black items-center text-center mt-2 rounded-md bg-white shadow-lg">
 
 
 
