@@ -103,7 +103,7 @@ const SignUpForm = () => {
                             <span>Sign Up</span>
                         </button>
                         <p className="text-center">Already a signed up? <Link to="/loginpage"
-                                                                          className="text-purple-600 font-medium inline-flex space-x-1 items-center"><span>Register now </span><span><svg
+                                                                          className="text-purple-600 font-medium inline-flex space-x-1 items-center"><span>Log in now </span><span><svg
                             xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor"
                             strokeWidth="2">

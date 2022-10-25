@@ -294,6 +294,19 @@ const TaskHub = () => {
         setGroupMembers(group_members)
 
     }
+
+
+    const getAllCompletedTasks = async () => {
+        let { data: oldtasks, error } = await supabase
+            .from('oldtasks')
+            .select('*')
+            .eq("group_id", getGroupId).eq("completed",true)
+
+        setAllTaskData(oldtasks)
+        return oldtasks
+    }
+
+
     return (
         <div className="flex relative bg-gray-200">
 
@@ -372,8 +385,8 @@ const TaskHub = () => {
                         </div>
                         <p onClick={getTaskData} className="text-center cursor-pointer text-purple-600">All Tasks</p>
                         <p onClick={getHighPrioTasks} className="text-center cursor-pointer text-purple-600">High Priority Tasks</p>
-                        <p onClick={getTasksDueSoon} className="text-center cursor-pointer text-purple-600">Tasks Due Soon</p>
-                        <p className="text-center cursor-pointer text-purple-600">Completed Tasks</p>
+                        <p onClick={getTasksDueSoon} className="text-center cursor-pointer text-purple-600">Tasks Due Today</p>
+                        <p onClick={getAllCompletedTasks} className="text-center cursor-pointer text-purple-600">Completed Tasks</p>
                     </div>
                     <div className="flex space-x-8">
 
