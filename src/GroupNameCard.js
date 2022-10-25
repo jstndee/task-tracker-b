@@ -1,12 +1,15 @@
 import React from 'react';
 
-const GroupNameCard = ({name, groupSelector}) => {
+const GroupNameCard = ({name, groupSelector, getSpecificGroupTasks}) => {
 
 
 
     return (
         <>
-         <p onClick={groupSelector}>{name}</p>
+            <div className="flex space-x-3">
+                <p onMouseEnter={groupSelector} onClick={getSpecificGroupTasks}className="cursor-pointer">{name}</p>
+
+            </div>
         </>
     );
 };

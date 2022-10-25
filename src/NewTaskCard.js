@@ -20,23 +20,23 @@ const NewTaskCard = ({title, description, due_date,id,created_at, completed, pri
 
                     <div>
                         <p><u>Title</u></p>
-                        <h1 className="label-text text-xl text-purple-600 font-bold">{title}</h1>
+                        <h1 className="label-text text-purple-600 font-bold">{title}</h1>
                     </div>
                     <div>
                         <p><u>Description</u></p>
-                        <p>{description}</p>
+                        <p className="text-sm">{description}</p>
                     </div>
                     <div>
                         <p><u>Due Date</u></p>
-                        <p>{due_date}</p>
+                        <p className="text-sm">{due_date}</p>
                     </div>
                     <div>
                         <p><u>Priority</u></p>
-                        <p>{priority}</p>
+                        <p className="text-sm">{priority}</p>
                     </div>
                     <div>
                         <p><u>Assigned by</u></p>
-                        <p>{profile_id}</p>
+                        <p className="text-sm">{profile_id}</p>
                     </div>
 
                 <div>

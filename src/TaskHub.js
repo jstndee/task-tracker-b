@@ -5,6 +5,7 @@ import {createClient} from "@supabase/supabase-js";
 import NewTaskCard from "./NewTaskCard";
 import MeetingCard from "./MeetingCard";
 import GroupNameCard from "./GroupNameCard";
+import MemberCard from "./MemberCard";
 
 const TaskHub = () => {
 
@@ -32,8 +33,10 @@ const TaskHub = () => {
     const user = JSON.parse(localStorage.getItem("currentUser"))
     //const userId = user.id
 
+    const [groupMembers, setGroupMembers] = useState([])
     const [selectedGroup, setSelectedGroup] = useState("")
-
+    const [getGroupId, setGetGroupId] = useState(0)
+    const [prioVal, setPrioVal] = useState("")
     let [dependancy, setDependancy] = useState(0)
     let [meetingDependancy, setMeetingDependancy] = useState(0)
 
@@ -41,7 +44,20 @@ const TaskHub = () => {
 
         let { data: oldtasks, error } = await supabase
             .from('oldtasks')
-            .select('*');
+            .select('*')
+            .eq("group_id", getGroupId)
+
+
+        setAllTaskData(oldtasks)
+        return oldtasks
+    }
+    const getSpecificGroupTasks = async () => {
+
+        let { data: oldtasks, error } = await supabase
+            .from('oldtasks')
+            .select('*')
+            .eq("group_id", getGroupId)
+
 
         setAllTaskData(oldtasks)
         return oldtasks
@@ -60,7 +76,7 @@ const TaskHub = () => {
         let { data: oldtasks, error } = await supabase
             .from('oldtasks')
             .select("*")
-            .eq('completed', true);
+            .eq("group_id", getGroupId).eq('completed', true);
 
         setAllTaskData(oldtasks)
 
@@ -71,13 +87,13 @@ const TaskHub = () => {
 
         let newTaskTitle = taskTitle.current.value
         let newTaskDescription = taskDescription.current.value
-        let newTaskPrio = taskPriority.current.value
+        let newTaskPrio = prioVal
         let newTaskDueDate = taskDueDate.current.value
 
         console.log(user.id)
 
 
-        const newTask = [{title: newTaskTitle, description: newTaskDescription, priority: newTaskPrio, due_date: newTaskDueDate, profile_assignee_id: user.id,profile_id: user.id, completed:"false", group_id:"1"}]
+        const newTask = [{title: newTaskTitle, description: newTaskDescription, priority: newTaskPrio, due_date: newTaskDueDate, profile_assignee_id: user.id,profile_id: user.id, completed:"false", group_id:getGroupId}]
 
 
         const { data, error } = await supabase
@@ -205,17 +221,78 @@ const TaskHub = () => {
 
 
         setSelectedGroup(groupSelected)
-        console.log(selectedGroup)
+        //console.log(selectedGroup)
+        let { data: group, error } = await supabase
+            .from('groups')
+            .select("*")
+            .eq("name", groupSelected)
+
+
+        setGetGroupId(group[0].id)
+
+        console.log(getGroupId)
+
 
     }
+    function formatDate(date) {
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
 
+        return [year, month, day].join('-');
+    }
+
+    const getHighPrioTasks = async () => {
+        let { data: oldtasks, error } = await supabase
+            .from('oldtasks')
+            .select('*')
+            .eq("group_id", getGroupId).eq("priority","High")
+
+        setAllTaskData(oldtasks)
+        return oldtasks
+    }
+
+    const getTasksDueSoon = async () => {
+        let { data: oldtasks, error } = await supabase
+            .from('oldtasks')
+            .select('*')
+            .eq("group_id", getGroupId).eq("due_date","2022-10-25")
+
+        setAllTaskData(oldtasks)
+        return oldtasks
+    }
 
 
     if(successAdd){
         setTimeout(() => {
             setSuccessAdd(false)
         },2000)
+    }
+
+
+    const handlePrioSelect = (e) => {
+        setPrioVal(e.target.value)
+    }
+
+    const getGroupMembers = async () => {
+        let { data: group_members} = await supabase
+            .from('group_members')
+            .select(`
+    profile_id,
+    profiles (
+      username
+    )
+  `).eq("group_id", getGroupId)
+
+        console.log(group_members.map(name => name.profiles.username))
+        setGroupMembers(group_members)
+
     }
     return (
         <div className="flex relative bg-gray-200">
@@ -234,7 +311,7 @@ const TaskHub = () => {
 
                         </a>
                         <div className="flex flex-col items-center">
-                        {userGroupNames.map( name => <GroupNameCard name={name.groups.name} groupSelector={groupSelector}/>)}
+                        {userGroupNames.map( name => <GroupNameCard name={name.groups.name} groupSelector={groupSelector} getSpecificGroupTasks={getSpecificGroupTasks}/>)}
                         </div>
                     </li>
                     <li className="relative">
@@ -245,8 +322,11 @@ const TaskHub = () => {
                                 <path fill="currentColor"
                                       d="M336.5 160C322 70.7 287.8 8 248 8s-74 62.7-88.5 152h177zM152 256c0 22.2 1.2 43.5 3.3 64h185.3c2.1-20.5 3.3-41.8 3.3-64s-1.2-43.5-3.3-64H155.3c-2.1 20.5-3.3 41.8-3.3 64zm324.7-96c-28.6-67.9-86.5-120.4-158-141.6 24.4 33.8 41.2 84.7 50 141.6h108zM177.2 18.4C105.8 39.6 47.8 92.1 19.3 160h108c8.7-56.9 25.5-107.8 49.9-141.6zM487.4 192H372.7c2.1 21 3.3 42.5 3.3 64s-1.2 43-3.3 64h114.6c5.5-20.5 8.6-41.8 8.6-64s-3.1-43.5-8.5-64zM120 256c0-21.5 1.2-43 3.3-64H8.6C3.2 212.5 0 233.8 0 256s3.2 43.5 8.6 64h114.6c-2-21-3.2-42.5-3.2-64zm39.5 96c14.5 89.3 48.7 152 88.5 152s74-62.7 88.5-152h-177zm159.3 141.6c71.4-21.2 129.4-73.7 158-141.6h-108c-8.8 56.9-25.6 107.8-50 141.6zM19.3 352c28.6 67.9 86.5 120.4 158 141.6-24.4-33.8-41.2-84.7-50-141.6h-108z"></path>
                             </svg>
-                            <span>Group Members</span>
+                            <span onClick={getGroupMembers}>Group Members</span>
                         </a>
+                        <div className="flex flex-col items-center">
+                            {groupMembers.map(name => <MemberCard name={name.profiles.username}/>)}
+                        </div>
                     </li>
                     <li className="relative">
                         <a className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
@@ -290,9 +370,9 @@ const TaskHub = () => {
                             <h1 className="md:text-2xl sm:text-2xs font-bold text-center">{selectedGroup} Tasks</h1>
                             <label htmlFor="my-modal-3" className="text-center btn btn-xs modal-button h-full">+</label>
                         </div>
-                        <p className="text-center cursor-pointer text-purple-600">All Tasks</p>
-                        <p className="text-center cursor-pointer text-purple-600">High Priority Tasks</p>
-                        <p className="text-center cursor-pointer text-purple-600">Tasks Due Soon</p>
+                        <p onClick={getTaskData} className="text-center cursor-pointer text-purple-600">All Tasks</p>
+                        <p onClick={getHighPrioTasks} className="text-center cursor-pointer text-purple-600">High Priority Tasks</p>
+                        <p onClick={getTasksDueSoon} className="text-center cursor-pointer text-purple-600">Tasks Due Soon</p>
                         <p className="text-center cursor-pointer text-purple-600">Completed Tasks</p>
                     </div>
                     <div className="flex space-x-8">
@@ -300,6 +380,7 @@ const TaskHub = () => {
 
                     </div>
                     <div className="">
+                        {(selectedGroup === "") ? <p className="font-bold text-xl mt-7">Please select a group by clicking on the "My Groups" Button in the side bar</p> : <p></p>}
                         {successAdd ? <p className="text-xl font-bold text-purple-600">TASK ADDED SUCCESSFULLY</p> : <p></p>}
                         {allTaskData.map(task => <NewTaskCard deleteTask = {deleteTask} completeTask = {completeTask} key={task.id} {...task} />)}
                     </div>
@@ -332,7 +413,7 @@ const TaskHub = () => {
                             <option value="">Assign To</option>
                             <option value="bob">Bob</option>
                         </select>
-                        <select>
+                        <select onChange={handlePrioSelect}>
                             <option value="">Priority</option>
                             <option value="Low" ref={taskPriority}>Low</option>
                             <option value="Medium" ref={taskPriority}>Medium</option>
