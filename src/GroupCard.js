@@ -12,7 +12,7 @@ const GroupCard = ({name, description, image_url, profile_id, joinGroup, id}) =>
                     <p>Member Count</p>
                     <p>Group Rating</p>
                     <div className="card-actions justify-end">
-                        <button onClick={async () => {await joinGroup(id)}} className="btn btn-primary">Join Group</button>
+                        <button onClick={async () => {await joinGroup(id)}} className="btn btn-primary bg-purple-600">Join Group</button>
                     </div>
                 </div>
             </div>

@@ -13,19 +13,35 @@ const MeetingCard = ({title, description, time,duration, profile_id,date, delete
 
     return (
 
-        <div className="flex justify-between border-2 border-black items-center text-center">
+        <div className="flex justify-between border-2 border-black items-center text-center mt-2">
 
 
 
 
-
-            <h1 className="label-text text-xl text-teal-600 font-bold">{title}</h1>
-            <p>{description}</p>
-            <p>{date}</p>
-            <p>{duration}</p>
-            <p>test</p>
-            <p>{time}</p>
-            <p>Assigned by {profile_id}</p>
+            <div>
+                <p><u>Title</u></p>
+                <h1 className="label-text text-xl text-purple-600 font-bold">{title}</h1>
+            </div>
+            <div>
+                <p><u>Description</u></p>
+                <p>{description}</p>
+            </div>
+            <div>
+                <p><u>Date</u></p>
+                <p>{date}</p>
+            </div>
+            <div>
+                <p><u>Duration</u></p>
+                <p>{duration}</p>
+            </div>
+            <div>
+                <p><u>Time</u></p>
+                <p>{time}</p>
+            </div>
+            <div>
+                <p><u>Created by</u></p>
+                <p>{profile_id}</p>
+            </div>
 
             {/*
             <button onClick={async () => {await completeTask(id)}} className="btn bg-teal-600 btn-xs">Complete</button>

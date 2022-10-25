@@ -13,23 +13,36 @@ const NewTaskCard = ({title, description, due_date,id,created_at, completed, pri
 
     return (
 
-        <div className="flex justify-between border-2 border-black items-center text-center">
+        <div className="flex justify-between border-2 border-black items-center text-center mt-2">
 
 
 
 
+                    <div>
+                        <p><u>Title</u></p>
+                        <h1 className="label-text text-xl text-purple-600 font-bold">{title}</h1>
+                    </div>
+                    <div>
+                        <p><u>Description</u></p>
+                        <p>{description}</p>
+                    </div>
+                    <div>
+                        <p><u>Due Date</u></p>
+                        <p>{due_date}</p>
+                    </div>
+                    <div>
+                        <p><u>Priority</u></p>
+                        <p>{priority}</p>
+                    </div>
+                    <div>
+                        <p><u>Assigned by</u></p>
+                        <p>{profile_id}</p>
+                    </div>
 
-                    <h1 className="label-text text-xl text-teal-600 font-bold">{title}</h1>
-                    <p>{description}</p>
-                    <p>{due_date}</p>
-                    <p>{created_at}</p>
-                    <p>test</p>
-                    <p>{priority}</p>
-                    <p>Assigned by {profile_id}</p>
-
-
-                <button onClick={async () => {await completeTask(id)}} className="btn bg-teal-600 btn-xs">Complete</button>
-                <button onClick={async () => {await deleteTask(id)}} className="btn modal-button btn-xs">Delete</button>
+                <div>
+                    <button onClick={async () => {await completeTask(id)}} className="btn bg-purple-600 btn-xs">Complete</button>
+                    <button onClick={async () => {await deleteTask(id)}} className="btn modal-button btn-xs">Delete</button>
+                </div>
 
 
 

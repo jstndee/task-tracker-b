@@ -84,7 +84,7 @@ const GroupNav = () => {
 
 
     return (
-        <div>
+        <div className="bg-gray-200">
             <label htmlFor="my-modal-5" className="btn modal-button text-center btn flex justify-center">Create Group</label>
             <p className="text-center">Or Join One Below</p>
             <hr/>

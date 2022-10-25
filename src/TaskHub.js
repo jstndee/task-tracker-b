@@ -77,7 +77,7 @@ const TaskHub = () => {
         console.log(user.id)
 
 
-        const newTask = [{title: newTaskTitle, description: newTaskDescription, priority: newTaskPrio, due_date: newTaskDueDate, profile_assignee_id: user.id,profile_id: user.id, completed:"false",}]
+        const newTask = [{title: newTaskTitle, description: newTaskDescription, priority: newTaskPrio, due_date: newTaskDueDate, profile_assignee_id: user.id,profile_id: user.id, completed:"false", group_id:"1"}]
 
 
         const { data, error } = await supabase
@@ -200,16 +200,12 @@ const TaskHub = () => {
         //get all groups and filter the ones based on the name
 
         const groupSelected = e.currentTarget.textContent
-        console.log(groupSelected)
 
-        let { data: groups, error } = await supabase
-            .from('groups')
-            .select("*")
 
-            // Filters
-            .eq('name', {groupSelected})
 
-        console.log(groups)
+
+        setSelectedGroup(groupSelected)
+        console.log(selectedGroup)
 
     }
 
@@ -222,9 +218,9 @@ const TaskHub = () => {
         },2000)
     }
     return (
-        <div className="flex relative">
-            {successAdd ? <p className="text-xl font-bold text-green-500">TASK ADDED SUCCESSFULLY</p> : <p></p>}
-            <div className="w-60 h-screen shadow-md bg-white hidden md:flex">
+        <div className="flex relative bg-gray-200">
+
+            <div className="w-60 h-screen shadow-md bg-gray-200 border-2 border-black hidden md:flex">
                 <ul className="relative">
                     <li className="relative">
                         <a className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
@@ -234,7 +230,7 @@ const TaskHub = () => {
                                 <path fill="currentColor"
                                       d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path>
                             </svg>
-                            <span onClick={getUserGroups}>Groups</span>
+                            <span onClick={getUserGroups}>My Groups</span>
 
                         </a>
                         <div className="flex flex-col items-center">
@@ -249,7 +245,7 @@ const TaskHub = () => {
                                 <path fill="currentColor"
                                       d="M336.5 160C322 70.7 287.8 8 248 8s-74 62.7-88.5 152h177zM152 256c0 22.2 1.2 43.5 3.3 64h185.3c2.1-20.5 3.3-41.8 3.3-64s-1.2-43.5-3.3-64H155.3c-2.1 20.5-3.3 41.8-3.3 64zm324.7-96c-28.6-67.9-86.5-120.4-158-141.6 24.4 33.8 41.2 84.7 50 141.6h108zM177.2 18.4C105.8 39.6 47.8 92.1 19.3 160h108c8.7-56.9 25.5-107.8 49.9-141.6zM487.4 192H372.7c2.1 21 3.3 42.5 3.3 64s-1.2 43-3.3 64h114.6c5.5-20.5 8.6-41.8 8.6-64s-3.1-43.5-8.5-64zM120 256c0-21.5 1.2-43 3.3-64H8.6C3.2 212.5 0 233.8 0 256s3.2 43.5 8.6 64h114.6c-2-21-3.2-42.5-3.2-64zm39.5 96c14.5 89.3 48.7 152 88.5 152s74-62.7 88.5-152h-177zm159.3 141.6c71.4-21.2 129.4-73.7 158-141.6h-108c-8.8 56.9-25.6 107.8-50 141.6zM19.3 352c28.6 67.9 86.5 120.4 158 141.6-24.4-33.8-41.2-84.7-50-141.6h-108z"></path>
                             </svg>
-                            <span>Sidenav link 2</span>
+                            <span>Group Members</span>
                         </a>
                     </li>
                     <li className="relative">
@@ -269,7 +265,7 @@ const TaskHub = () => {
                 <div className="border-2 h-1/2 w-full">
                     <div className="flex justify-between">
                         <div className="flex flex-row items-center bg-gray-300 rounded-md space-x-2">
-                            <h1 className="md:text-2xl sm:text-2xs font-bold text-center">Group name tasks</h1>
+                            <h1 className="md:text-2xl sm:text-2xs font-bold text-center">{selectedGroup} Tasks</h1>
                             <label htmlFor="my-modal-3" className="text-center btn btn-xs modal-button h-full">+</label>
                         </div>
                         <p className="text-center cursor-pointer">All Tasks</p>
@@ -278,19 +274,19 @@ const TaskHub = () => {
                         <p className="text-center cursor-pointer">Completed Tasks</p>
                     </div>
                     <div className="flex space-x-8">
-                        <p>Title</p>
-                        <p>Description</p>
-                        <p>Due Date</p>
-                        <p>Priority</p>
-                        <p>Assigned By</p>
+
 
                     </div>
-                    {allTaskData.map(task => <NewTaskCard deleteTask = {deleteTask} completeTask = {completeTask} key={task.id} {...task} />)}
+                    <div className="">
+                        {successAdd ? <p className="text-xl font-bold text-purple-600">TASK ADDED SUCCESSFULLY</p> : <p></p>}
+                        {allTaskData.map(task => <NewTaskCard deleteTask = {deleteTask} completeTask = {completeTask} key={task.id} {...task} />)}
+                    </div>
+
                 </div>
                 <div className="border-2 h-1/2 w-full lg:mt-4 sm:mt-20">
                     <div className="flex justify-between">
                         <div className="flex flex-row items-center bg-gray-300 rounded-md space-x-2">
-                            <h1 className="md:text-2xl sm:text-2xs font-bold text-center">Group name meetings</h1>
+                            <h1 className="md:text-2xl sm:text-2xs font-bold text-center">{selectedGroup} Meetings</h1>
                             <label htmlFor="my-modal-1" className="text-center btn btn-xs modal-button h-full">+</label>
                         </div>
                         <p className="text-center cursor-pointer">All Meetings</p>
