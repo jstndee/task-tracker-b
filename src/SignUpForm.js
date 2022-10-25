@@ -1,19 +1,20 @@
 import React from 'react';
 import {useState} from "react";
 import {useRef} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import image from "./images/linkedin-svgrepo-com.svg";
 import {createClient} from "@supabase/supabase-js";
 
 
 const SignUpForm = () => {
-
+    const navigate = useNavigate()
     const supabaseUrl = process.env["REACT_APP_SUPABASE_API_ENDPOINT"]
     const supabaseKey = process.env["REACT_APP_SUPABASE_API_SECRET_KEY"]
     const supabase = createClient(supabaseUrl, supabaseKey)
 
     const emailInput = useRef();
-    const passInput = useRef()
+    const passInput = useRef();
+    const usernameInput = useRef();
 
     const handleSignUp = async (e) => {
         e.preventDefault()
@@ -22,7 +23,7 @@ const SignUpForm = () => {
             email: emailInput.current.value,
             password: passInput.current.value})
 
-
+        navigate("/loginpage")
         console.log(user)
         console.log(error)
 
@@ -75,6 +76,12 @@ const SignUpForm = () => {
                             <input id="email" name="email" type="email"
                                    className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
                                    placeholder="Enter email address" ref={emailInput}/>
+                        </label>
+                        <label htmlFor="username">
+
+                            <input id="username" name="username" type="text"
+                                   className="w-full py-3 border border-slate-200 rounded-xl px-3 focus:outline-none focus:border-slate-500 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
+                                   placeholder="Enter your username" ref={usernameInput}/>
                         </label>
                         <label htmlFor="password">
 

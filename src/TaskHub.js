@@ -6,6 +6,7 @@ import NewTaskCard from "./NewTaskCard";
 import MeetingCard from "./MeetingCard";
 import GroupNameCard from "./GroupNameCard";
 import MemberCard from "./MemberCard";
+import MemberOptions from "./MemberOptions";
 
 const TaskHub = () => {
 
@@ -32,7 +33,7 @@ const TaskHub = () => {
     const [successAdd, setSuccessAdd] = useState(false)
     const user = JSON.parse(localStorage.getItem("currentUser"))
     //const userId = user.id
-
+    const [assigneeName, setAssigneeName] = useState("")
     const [groupMembers, setGroupMembers] = useState([])
     const [selectedGroup, setSelectedGroup] = useState("")
     const [getGroupId, setGetGroupId] = useState(0)
@@ -305,7 +306,17 @@ const TaskHub = () => {
         setAllTaskData(oldtasks)
         return oldtasks
     }
+    const handleAssigneeIdInput = (e) => {
+        setAssigneeName(e.target.value)
+    }
+    const getAssigneeId = async  () => {
+        let { data: profiles, error } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq("name", assigneeName)
 
+        console.log(profiles)
+    }
 
     return (
         <div className="flex relative bg-gray-200">
@@ -406,8 +417,8 @@ const TaskHub = () => {
                             <label htmlFor="my-modal-1" className="text-center btn btn-xs modal-button h-full">+</label>
                         </div>
                         <p className="text-center cursor-pointer text-purple-600">All Meetings</p>
-                        <p className="text-center cursor-pointer text-purple-600">Meetings Due Soon</p>
-                        <p className="text-center cursor-pointer text-purple-600">Completed Meetings</p>
+                        <p className="text-center cursor-pointer text-purple-600">Today's Meetings</p>
+                        <p className="text-center cursor-pointer text-purple-600">Past Meetings</p>
                     </div>
 
                     {allMeetingData.map(meeting => <MeetingCard deleteTask = {deleteTask} completeTask = {completeTask} key={meeting.id} {...meeting} />)}
@@ -422,9 +433,9 @@ const TaskHub = () => {
                     <form onSubmit={addNewTask}>
                         <input type="text"className="" placeholder="Title"ref={taskTitle}/>
                         <input type="text"className="" placeholder="Description" ref={taskDescription}/>
-                        <select>
+                        <select onChange={handleAssigneeIdInput}>
                             <option value="">Assign To</option>
-                            <option value="bob">Bob</option>
+                            {groupMembers.map(name => <MemberOptions name={name.profiles.username}/>)}
                         </select>
                         <select onChange={handlePrioSelect}>
                             <option value="">Priority</option>
