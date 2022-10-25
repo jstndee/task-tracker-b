@@ -268,10 +268,10 @@ const TaskHub = () => {
                             <h1 className="md:text-2xl sm:text-2xs font-bold text-center">{selectedGroup} Tasks</h1>
                             <label htmlFor="my-modal-3" className="text-center btn btn-xs modal-button h-full">+</label>
                         </div>
-                        <p className="text-center cursor-pointer">All Tasks</p>
-                        <p className="text-center cursor-pointer">High Priority Tasks</p>
-                        <p className="text-center cursor-pointer">Tasks Due Soon</p>
-                        <p className="text-center cursor-pointer">Completed Tasks</p>
+                        <p className="text-center cursor-pointer text-purple-600">All Tasks</p>
+                        <p className="text-center cursor-pointer text-purple-600">High Priority Tasks</p>
+                        <p className="text-center cursor-pointer text-purple-600">Tasks Due Soon</p>
+                        <p className="text-center cursor-pointer text-purple-600">Completed Tasks</p>
                     </div>
                     <div className="flex space-x-8">
 
@@ -289,9 +289,9 @@ const TaskHub = () => {
                             <h1 className="md:text-2xl sm:text-2xs font-bold text-center">{selectedGroup} Meetings</h1>
                             <label htmlFor="my-modal-1" className="text-center btn btn-xs modal-button h-full">+</label>
                         </div>
-                        <p className="text-center cursor-pointer">All Meetings</p>
-                        <p className="text-center cursor-pointer">Meetings Due Soon</p>
-                        <p className="text-center cursor-pointer">Completed Meetings</p>
+                        <p className="text-center cursor-pointer text-purple-600">All Meetings</p>
+                        <p className="text-center cursor-pointer text-purple-600">Meetings Due Soon</p>
+                        <p className="text-center cursor-pointer text-purple-600">Completed Meetings</p>
                     </div>
 
                     {allMeetingData.map(meeting => <MeetingCard deleteTask = {deleteTask} completeTask = {completeTask} key={meeting.id} {...meeting} />)}

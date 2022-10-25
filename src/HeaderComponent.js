@@ -20,7 +20,7 @@ const HeaderComponent = () => {
 
 
                     <ul className="menu-horizontal space-x-4">
-                        <li onClick={sendToUserTaskPage} className="font-bold text-purple-600 border-2 border-purple-600 py-2 px-4 rounded-full hover:text-purple-700 hover:border-purple-700">Tasks</li>
+
                         <li><Link to="/loginpage"
                                   className="font-bold text-purple-600 border-2 border-purple-600 py-2 px-4 rounded-full hover:text-purple-700 hover:border-purple-700">Log
                             In</Link>
@@ -28,8 +28,9 @@ const HeaderComponent = () => {
                         <li><Link to="/signuppage"
                                   className="font-bold text-white bg-purple-600 py-2 px-4 rounded-full hover:bg-purple-700">Sign
                             Up</Link></li>
-                        <li onClick={sendToUserGroupPage}>GROUPS</li>
-                        <li>SIGN OUT</li>
+                        <li onClick={sendToUserTaskPage} className="text-purple-600 font-bold">TASKS</li>
+                        <li onClick={sendToUserGroupPage}className="text-purple-600 font-bold">GROUPS</li>
+                        <li className="text-purple-600 font-bold">SIGN OUT</li>
 
                     </ul>
                 </div>

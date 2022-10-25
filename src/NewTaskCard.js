@@ -13,7 +13,7 @@ const NewTaskCard = ({title, description, due_date,id,created_at, completed, pri
 
     return (
 
-        <div className="flex justify-between border-2 border-black items-center text-center mt-2">
+        <div className="flex justify-between border-2 border-black items-center text-center mt-2 rounded-md bg-white">
 
 
 
