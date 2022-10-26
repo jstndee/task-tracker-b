@@ -23,9 +23,19 @@ const SignUpForm = () => {
             email: emailInput.current.value,
             password: passInput.current.value})
 
+
+        if(user){
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: emailInput.current.value,
+                password: passInput.current.value,
+
+            })
+
+            //const {data2, error2} = await supabase.from("profiles").insert({"id": data.user.id},{"username", usernameInput})
+        }
+
         navigate("/loginpage")
-        console.log(user)
-        console.log(error)
+
 
         //add info to profiles table here too
     }
