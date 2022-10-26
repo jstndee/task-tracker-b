@@ -33,7 +33,8 @@ const LogInForm = () => {
         })
         console.log(data)
 
-        navigate(`/task-hub/:${data.user.id}`)
+
+        navigate(`/group-nav/:${data.user.id}`)
 
 
         cacheCurrentUser(data)
@@ -63,8 +64,8 @@ const LogInForm = () => {
 
     return (<div>
             <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl">
-                <h1 className="text-4xl text-center text-teal-600 font-medium">Login</h1>
-                <p className="text-orange-400 text-center">Hi, Welcome back 👋</p>
+                <h1 className="text-4xl text-center text-purple-600 font-medium">Login</h1>
+                <p className="text-purple-600 text-center">Hi, Welcome back 👋</p>
 
                 <div className="my-5">
                     <button
@@ -93,19 +94,11 @@ const LogInForm = () => {
                                    placeholder="Enter your password"/>
                         </label>
                         <div className="flex flex-row justify-between">
-                            <div>
-                                <label htmlFor="remember" className="text-teal-600">
-                                    <input type="checkbox" id="remember"
-                                           className="w-4 h-4 border-teal-700 focus:bg-teal-600"/>
-                                    Remember me
-                                </label>
-                            </div>
-                            <div>
-                                <a href="#" className="font-medium text-orange-400">Forgot Password?</a>
-                            </div>
+
+
                         </div>
                         <Link to="/maintaskpage" onClick={handleLoginWithPass}
-                            className="w-full py-3 font-medium text-white bg-teal-600 hover:bg-teal-500 rounded-lg border-indigo-500 hover:shadow inline-flex space-x-2 items-center justify-center">
+                            className="w-full py-3 font-medium text-white bg-purple-600 hover:bg-purple-500 rounded-lg border-indigo-500 hover:shadow inline-flex space-x-2 items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor"
                                  strokeWidth="2">
@@ -114,8 +107,8 @@ const LogInForm = () => {
                             </svg>
                             <span>Login</span>
                         </Link>
-                        <p className="text-center">Not registered yet? <Link to="/signuppage"
-                                                                          className="text-orange-400 font-medium inline-flex space-x-1 items-center"><span>Register now </span><span><svg
+                        <p className="text-center">Don't have an account? <Link to="/signuppage"
+                                                                          className="text-purple-600 font-medium inline-flex space-x-1 items-center"><span>Sign up now </span><span><svg
                             xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor"
                             strokeWidth="2">

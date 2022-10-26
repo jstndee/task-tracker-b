@@ -1,19 +1,20 @@
 import React from 'react';
 import {useState} from "react";
 import {useRef} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import image from "./images/linkedin-svgrepo-com.svg";
 import {createClient} from "@supabase/supabase-js";
 
 
 const SignUpForm = () => {
-
+    const navigate = useNavigate()
     const supabaseUrl = process.env["REACT_APP_SUPABASE_API_ENDPOINT"]
     const supabaseKey = process.env["REACT_APP_SUPABASE_API_SECRET_KEY"]
     const supabase = createClient(supabaseUrl, supabaseKey)
 
     const emailInput = useRef();
-    const passInput = useRef()
+    const passInput = useRef();
+    const usernameInput = useRef();
 
     const handleSignUp = async (e) => {
         e.preventDefault()
@@ -23,8 +24,18 @@ const SignUpForm = () => {
             password: passInput.current.value})
 
 
-        console.log(user)
-        console.log(error)
+        if(user){
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: emailInput.current.value,
+                password: passInput.current.value,
+
+            })
+
+            //const {data2, error2} = await supabase.from("profiles").insert({"id": data.user.id},{"username", usernameInput})
+        }
+
+        navigate("/loginpage")
+
 
         //add info to profiles table here too
     }
@@ -52,8 +63,8 @@ const SignUpForm = () => {
 
     return (<div>
             <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl">
-                <h1 className="text-4xl text-center text-teal-600 font-medium">Sign Up</h1>
-                <p className="text-orange-400 text-center">Hi, Sign Up Below 👋</p>
+                <h1 className="text-4xl text-center text-purple-600 font-medium">Sign Up</h1>
+                <p className="text-purple-600 text-center">Hi, Sign Up Below 👋</p>
 
                 <div className="my-5">
                     <button
@@ -76,6 +87,12 @@ const SignUpForm = () => {
                                    className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
                                    placeholder="Enter email address" ref={emailInput}/>
                         </label>
+                        <label htmlFor="username">
+
+                            <input id="username" name="username" type="text"
+                                   className="w-full py-3 border border-slate-200 rounded-xl px-3 focus:outline-none focus:border-slate-500 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
+                                   placeholder="Enter your username" ref={usernameInput}/>
+                        </label>
                         <label htmlFor="password">
 
                             <input id="password" name="password" type="password"
@@ -84,7 +101,7 @@ const SignUpForm = () => {
                         </label>
                         <div className="flex flex-row justify-between">
                             <div>
-                                <label htmlFor="remember" className="text-teal-600">
+                                <label htmlFor="remember" className="text-purple-600">
 
                                 </label>
                             </div>
@@ -93,7 +110,7 @@ const SignUpForm = () => {
                             </div>
                         </div>
                         <button
-                            className="w-full py-3 font-medium text-white bg-teal-600 hover:bg-teal-500 rounded-lg border-indigo-500 hover:shadow inline-flex space-x-2 items-center justify-center">
+                            className="w-full py-3 font-medium text-white bg-purple-600 hover:bg-purple-500 rounded-lg border-indigo-500 hover:shadow inline-flex space-x-2 items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor"
                                  strokeWidth="2">
@@ -103,7 +120,7 @@ const SignUpForm = () => {
                             <span>Sign Up</span>
                         </button>
                         <p className="text-center">Already a signed up? <Link to="/loginpage"
-                                                                          className="text-orange-400 font-medium inline-flex space-x-1 items-center"><span>Register now </span><span><svg
+                                                                          className="text-purple-600 font-medium inline-flex space-x-1 items-center"><span>Log in now </span><span><svg
                             xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor"
                             strokeWidth="2">

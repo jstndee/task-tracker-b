@@ -12,7 +12,7 @@ const MeetTheTeam = () => {
                         <div className="flex flex-wrap justify-center text-center mb-12">
                             <div className="w-full lg:w-6/12 px-4">
 
-                                <h1 className="text-teal-500 text-4xl font-bold mb-8">
+                                <h1 className="text-purple-600 text-4xl font-bold mb-8">
                                     MSIMBO: ULEM Coding Bootcamp
                                 </h1>
 
@@ -43,11 +43,11 @@ const MeetTheTeam = () => {
 
                                     <div className="text-center mt-6">
 
-                                        <h1 className="text-teal-600 text-xl font-bold mb-1">
+                                        <h1 className="text-purple-600 text-xl font-bold mb-1">
                                             Didier
                                         </h1>
 
-                                        <div className="text-orange-400 font-light mb-2">
+                                        <div className="text-purple-600 font-light mb-2">
                                             Full-time Student
                                         </div>
 
@@ -85,11 +85,11 @@ const MeetTheTeam = () => {
 
                                     <div className="text-center mt-6">
 
-                                        <h1 className="text-teal-600 text-xl font-bold mb-1">
+                                        <h1 className="text-purple-600 text-xl font-bold mb-1">
                                             Davola
                                         </h1>
 
-                                        <div className="text-orange-400 font-light mb-2">
+                                        <div className="text-purple-600 font-light mb-2">
                                             Student
                                         </div>
 
@@ -127,11 +127,11 @@ const MeetTheTeam = () => {
 
                                     <div className="text-center mt-6">
 
-                                        <h1 className="text-teal-600 text-xl font-bold mb-1">
+                                        <h1 className="text-purple-600 text-xl font-bold mb-1">
                                             Justin
                                         </h1>
 
-                                        <div className="text-orange-400 font-light mb-2">
+                                        <div className="text-purple-600 font-light mb-2">
                                             Team Member
                                         </div>
 
@@ -169,11 +169,11 @@ const MeetTheTeam = () => {
 
                                     <div className="text-center mt-6">
 
-                                        <h1 className="text-teal-600 text-xl font-bold mb-1">
+                                        <h1 className="text-purple-600 text-xl font-bold mb-1">
                                             Kim
                                         </h1>
 
-                                        <div className="text-orange-400 font-light mb-2">
+                                        <div className="text-purple-600 font-light mb-2">
                                             Student
                                         </div>
 
