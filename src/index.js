@@ -12,6 +12,8 @@ import ContactUsPageC from "./ContactUsPageC";
 import MeetTheTeam from "./MeetTheTeam";
 import TaskHub from "./TaskHub";
 import GroupNav from "./GroupNav";
+import UpdatedLandPageB from "./UpdatedLandPageB";
+import UpdatedContactUs from "./UpdatedContactUs";
 
 
 const router = createBrowserRouter([
@@ -21,7 +23,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <WelcomeComponent/>
+                element: <UpdatedLandPageB/>
             },
             {
                 path: "/signuppage",
@@ -38,7 +40,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/contact",
-                element: <ContactUsPageC/>
+                element: <UpdatedContactUs/>
             },
             {
                 path: "/team",

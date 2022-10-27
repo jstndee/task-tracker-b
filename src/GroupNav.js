@@ -20,6 +20,7 @@ const GroupNav = () => {
     const groupImgUrl = useRef()
     const [groupDependancy, setGroupDependancy] = useState(0)
     const [allGroupData, setAllGroupData] = useState([])
+    const [signedInUsername, setSignedInUsername] = useState()
 
     const user = JSON.parse(localStorage.getItem("currentUser"))
 
@@ -61,6 +62,7 @@ const GroupNav = () => {
         const newFunc = async () => {
             const newData = await getGroupData()
             setAllGroupData(newData)
+            const usernameFind = await getUserName()
         }
         //getTaskData()
         newFunc()
@@ -82,6 +84,17 @@ const GroupNav = () => {
         //console.log(groupId)
     }
 
+    const getUserName = async () => {
+        let { data: username, error } = await supabase
+            .from('profiles')
+            .select('username')
+            .eq("id", user.id)
+
+
+        setSignedInUsername(username[0].username)
+        localStorage.setItem("currentUserUsername",username[0].username)
+        console.log(signedInUsername)
+    }
 
     return (
         <div className="bg-gray-200">
@@ -100,7 +113,7 @@ const GroupNav = () => {
                     <h3 className="text-lg font-bold">Create Group Below</h3>
                     <form onSubmit={addNewGroup}>
                         <input type="text" placeholder="Group Name" ref={groupName}/>
-                        <input type="text" placeholder="Group Description" ref={groupDescription}/>
+                        <input type="text" placeholder="Who is this group for" ref={groupDescription}/>
                         <input type="text" placeholder="Group Icon/Image URL" ref={groupImgUrl}/>
                         <input type="submit" value="Create Group"/>
                     </form>

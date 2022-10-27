@@ -61,8 +61,8 @@ const SignUpForm = () => {
 
 
 
-    return (<div>
-            <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl">
+    return (<div className="bg-gray-200">
+            <div className="max-w-lg mx-auto my-10 bg-gray-200 p-8 rounded-xl">
                 <h1 className="text-4xl text-center text-purple-600 font-medium">Sign Up</h1>
                 <p className="text-purple-600 text-center">Hi, Sign Up Below 👋</p>
 
