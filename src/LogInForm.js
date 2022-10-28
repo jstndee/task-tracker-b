@@ -17,7 +17,7 @@ const LogInForm = () => {
     const navigate = useNavigate()
 
 
-    const cacheCurrentUser = (data) => {
+    const cacheCurrentUser = (data, username) => {
         localStorage.setItem("currentUserId", data.user.id)
         localStorage.setItem("currentUser", JSON.stringify(data.user))
         localStorage.setItem("currentSession", JSON.stringify(data.session))
@@ -62,8 +62,8 @@ const LogInForm = () => {
         console.log("Signed Out")
     }
 
-    return (<div>
-            <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl">
+    return (<div className="bg-gray-200">
+            <div className="max-w-lg mx-auto my-10 bg-gray-200 p-8 rounded-xl">
                 <h1 className="text-4xl text-center text-purple-600 font-medium">Login</h1>
                 <p className="text-purple-600 text-center">Hi, Welcome back 👋</p>
 

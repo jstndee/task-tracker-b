@@ -3,7 +3,7 @@ import {Icon} from '@iconify/react';
 
 const MeetTheTeam = () => {
     return (<div>
-        <div className="flex items-center justify-center min-h-screen bg-white py-48">
+        <div className="flex items-center justify-center min-h-screen bg-gray-200 py-48">
             <div className="flex flex-col">
                 <div className="flex flex-col mt-2">
 

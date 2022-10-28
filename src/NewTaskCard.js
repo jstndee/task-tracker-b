@@ -1,15 +1,41 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createClient} from "@supabase/supabase-js";
 
 
-const NewTaskCard = ({title, description, due_date,id,created_at, completed, priority, profile_id, completeTask, deleteTask}) => {
+const NewTaskCard = ({title, description, due_date,id,created_at, completed, priority, profile_id, profile_assignee_id, completeTask, deleteTask}) => {
 
     const supabaseUrl = process.env.REACT_APP_SUPABASE_API_ENDPOINT
     const supabaseKey = process.env.REACT_APP_SUPABASE_API_SECRET_KEY
     const supabase = createClient(supabaseUrl, supabaseKey)
 
+    const [assignorName, setAssignorName] = useState()
+    const [assigneeName, setAssigneeName] = useState()
+    const convertAssignorIdToName = async () => {
+        let {data:name} = await supabase
+            .from("profiles")
+            .select("username")
+            .eq("id", profile_id)
+        setAssignorName(name[0].username)
+        console.log(assignorName)
+    }
+    const convertAssigneeIdToName = async () => {
+        let {data:name} = await supabase
+            .from("profiles")
+            .select("username")
+            .eq("id", profile_assignee_id)
+
+        setAssigneeName(name[0].username)
+        //console.log(assigneeName)
+    }
 
 
+    useEffect(() => {
+        const setNames = async () => {
+            await convertAssigneeIdToName()
+            await convertAssignorIdToName()
+        }
+        setNames()
+    },[0])
 
     return (
 
@@ -36,7 +62,7 @@ const NewTaskCard = ({title, description, due_date,id,created_at, completed, pri
                     </div>
                     <div>
                         <p><u className={completed ? "text-gray-400": "text-black"}>Assigned by</u></p>
-                        <p className={completed ? "text-sm text-gray-400": "text-sm"}>{profile_id}</p>
+                        <p className={completed ? "text-sm text-gray-400": "text-sm"}>{assignorName} to {assigneeName}</p>
                     </div>
 
                 <div>
