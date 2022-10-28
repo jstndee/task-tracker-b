@@ -73,9 +73,9 @@ const DaisyUiTopNav = () => {
                 <ul className="menu menu-horizontal p-0 tabs">
                     {user ? <p></p> : <li><Link to="/loginpage" className="font-bold text-white bg-purple-600 py-2 px-4 rounded-full hover:bg-purple-700">Log In</Link></li>}
                     {user ? <p></p> : <li><Link to="/signuppage" className="font-bold text-white bg-purple-600 py-2 px-4 rounded-full hover:bg-purple-700 ml-5">Sign Up</Link></li>}
-                    {user ? <li onClick={sendToUserTaskPage} className={"text-purple-600 font-bold cursor-pointer mr-5 border-2 rounded-md px-2 py-2 border-black bg-gray-200"}>Tasks</li> : <p></p> }
-                    {user ? <li onClick={sendToUserGroupPage}className={"text-purple-600 font-bold cursor-pointer mr-5 border-2 rounded-md px-2 py-2 border-black bg-gray-200"}>Groups</li>: <p></p>}
-                    {user ? <li onClick={signUserOut} className="text-purple-600 font-bold cursor-pointer mr-5 border-2 rounded-md px-2 py-2 border-black bg-gray-200">Sign Out</li> : <p></p>}
+                    {user ? <li onClick={sendToUserTaskPage} className={"text-purple-600 font-bold cursor-pointer mr-5 tab tab-active"}>Tasks</li> : <p></p> }
+                    {user ? <li onClick={sendToUserGroupPage}className={"text-purple-600 font-bold cursor-pointer mr-5 tab tab-active"}>Groups</li>: <p></p>}
+                    {user ? <li onClick={signUserOut} className="text-purple-600 font-bold cursor-pointer mr-5 tab tab-active">Sign Out</li> : <p></p>}
                 </ul>
             </div>
             <div className="navbar-end">

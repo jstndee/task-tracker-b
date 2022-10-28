@@ -13,6 +13,7 @@ import GroupNav from "./GroupNav";
 import UpdatedTopNav from "./UpdatedTopNav";
 import DaisyUiTopNav from "./DaisyUiTopNav";
 import UpdatedFooter from "./UpdatedFooter";
+import SimpleAltTaskCard from "./SimpleAltTaskCard";
 
 
 function App() {

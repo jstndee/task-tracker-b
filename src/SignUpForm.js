@@ -16,6 +16,23 @@ const SignUpForm = () => {
     const passInput = useRef();
     const usernameInput = useRef();
 
+    const handleUsernameInput = () => {
+
+    }
+
+    const addProfile = async (newId) => {
+        const {data} = await supabase
+            .from("profiles")
+            .insert([{id: newId,username: usernameInput.current.value, email: emailInput.current.value}])
+    }
+    const logInForProfileCreate = async () => {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: emailInput.current.value,
+            password: passInput.current.value,
+
+        })
+    }
+
     const handleSignUp = async (e) => {
         e.preventDefault()
 
@@ -24,15 +41,17 @@ const SignUpForm = () => {
             password: passInput.current.value})
 
 
-        if(user){
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: emailInput.current.value,
-                password: passInput.current.value,
+        const {data} = await supabase.auth.signInWithPassword({
+            email: emailInput.current.value,
+            password: passInput.current.value,
 
-            })
+        })
+
+
+            await addProfile(data.user.id)
 
             //const {data2, error2} = await supabase.from("profiles").insert({"id": data.user.id},{"username", usernameInput})
-        }
+
 
         navigate("/loginpage")
 

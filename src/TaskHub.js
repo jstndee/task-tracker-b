@@ -7,6 +7,7 @@ import MeetingCard from "./MeetingCard";
 import GroupNameCard from "./GroupNameCard";
 import MemberCard from "./MemberCard";
 import MemberOptions from "./MemberOptions";
+import SimpleAltTaskCard from "./SimpleAltTaskCard";
 
 const TaskHub = () => {
 
@@ -46,7 +47,7 @@ const TaskHub = () => {
         let { data: oldtasks, error } = await supabase
             .from('oldtasks')
             .select('*')
-            .eq("group_id", getGroupId)
+            .eq("group_id", getGroupId).eq("profile_assignee_id", user.id)
 
 
         setAllTaskData(oldtasks)
@@ -414,14 +415,14 @@ const TaskHub = () => {
 
 
                     </div>
-                    <div className="">
+                    <div className="flex flex-wrap justify-center">
                         {(selectedGroup === "") ? <p className="font-bold text-xl mt-7">Please select a group by clicking on the "My Groups" Button in the side bar</p> : <p></p>}
                         {successAdd ? <p className="text-xl font-bold text-purple-600">TASK ADDED SUCCESSFULLY</p> : <p></p>}
-                        {allTaskData.map(task => <NewTaskCard deleteTask = {deleteTask} completeTask = {completeTask} key={task.id} {...task} />)}
+                        {allTaskData.map(task => <SimpleAltTaskCard deleteTask = {deleteTask} completeTask = {completeTask} key={task.id} {...task} />)}
                     </div>
 
                 </div>
-                <div className="border-2 h-1/2 w-full lg:mt-4 sm:mt-20">
+                <div className="border-2 h-1/2 w-full lg:mt-20sm:mt-20">
                     <div className="flex justify-between">
                         <div className="flex flex-row items-center bg-gray-300 rounded-md space-x-2">
                             <h1 className="md:text-2xl sm:text-2xs font-bold text-center">{selectedGroup} Meetings</h1>
