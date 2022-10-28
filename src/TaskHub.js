@@ -415,10 +415,10 @@ const TaskHub = () => {
 
 
                     </div>
-                    <div className="flex flex-wrap justify-center">
+                    <div className="flex flex-col">
                         {(selectedGroup === "") ? <p className="font-bold text-xl mt-7">Please select a group by clicking on the "My Groups" Button in the side bar</p> : <p></p>}
                         {successAdd ? <p className="text-xl font-bold text-purple-600">TASK ADDED SUCCESSFULLY</p> : <p></p>}
-                        {allTaskData.map(task => <SimpleAltTaskCard deleteTask = {deleteTask} completeTask = {completeTask} key={task.id} {...task} />)}
+                        {allTaskData.map(task => <NewTaskCard deleteTask = {deleteTask} completeTask = {completeTask} key={task.id} {...task} />)}
                     </div>
 
                 </div>
