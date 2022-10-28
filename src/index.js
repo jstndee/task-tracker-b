@@ -14,6 +14,7 @@ import TaskHub from "./TaskHub";
 import GroupNav from "./GroupNav";
 import UpdatedLandPageB from "./UpdatedLandPageB";
 import UpdatedContactUs from "./UpdatedContactUs";
+import Dashboard from "./Dashboard";
 
 
 const router = createBrowserRouter([
@@ -53,6 +54,11 @@ const router = createBrowserRouter([
             {
                 path: "/group-nav/:id",
                 element: <GroupNav/>
+            }
+            ,
+            {
+                path: "/dashboard",
+                element: <Dashboard/>
             }
         ]
     }
